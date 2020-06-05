@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+/*baz made it */
+
+p {
+	color: black;
+}
+.wrapper {
+  text-align: center;
+  display: inline-block;
+  left: 50%;
+}
+.btn-group-xs > .btn, .btn-xs {
+  padding: .25rem .4rem;
+  font-size: .875rem;
+  line-height: .5;
+  border-radius: .2rem;
+}

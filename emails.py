@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import win32com.client as win32
+# import win32com.client as win32
 import urllib.request, json
 import requests
 from bs4 import BeautifulSoup
@@ -13,6 +13,9 @@ class EmailTemplate:
         self.subject = subject
         self.body = "Dear {},<br><br>\n\n".format(self.name) + body
         self.cc = cc
+
+    def __str__(self):
+        return str([self.name,self.email,self.subject,self.body,self.cc])
 
 
 def MPpoliceEmail(name, toname, ward, mpEmail):
@@ -216,25 +219,25 @@ def emailExtractor(urlString):
     return emailList
 
 
-def Emailer(et):
-    ### Change to dict on this and on all email writing functions
-    try:
-        recipient = et.email
-        subject = et.subject
-        copiedin = et.cc
-        text = et.subject
+# def Emailer(et):
+#     ### Change to dict on this and on all email writing functions
+#     try:
+#         recipient = et.email
+#         subject = et.subject
+#         copiedin = et.cc
+#         text = et.subject
 
-        outlook = win32.Dispatch("Outlook.Application")
-        mail = outlook.CreateItem(0)
-        mail.To = recipient
-        mail.Subject = subject
-        mail.HtmlBody = text
-        if copiedin:
-            mail.CC = copiedin
-        mail.Save()
-        print("Email done")
-    except:
-        print("One email failed")
+#         outlook = win32.Dispatch("Outlook.Application")
+#         mail = outlook.CreateItem(0)
+#         mail.To = recipient
+#         mail.Subject = subject
+#         mail.HtmlBody = text
+#         if copiedin:
+#             mail.CC = copiedin
+#         mail.Save()
+#         print("Email done")
+#     except:
+#         print("One email failed")
 
 
 def draftEmails(myname, postcode):
@@ -252,7 +255,9 @@ def draftEmails(myname, postcode):
     filled_email_templates = []
 
     for MPemail in MPemails:
-        filled_email_templates.append(MPpoliceEmail(myname, MPname, ward, MPemail))
+        filled_email_templates.append(
+            MPpoliceEmail(myname, MPname, ward, MPemail)
+        )
         filled_email_templates.append(
             MPbellymujingaEmail(myname, MPname, ward, MPemail)
         )
@@ -261,7 +266,8 @@ def draftEmails(myname, postcode):
     filled_email_templates.append(goviaBellymujingaEmail(myname))
 
     for email in filled_email_templates:
-        Emailer(email)
+        print(email)
+        # Emailer(email)
 
 
 myname = input("Please enter your full name (case sensitive): ")
