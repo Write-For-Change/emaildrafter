@@ -30,8 +30,8 @@ def MPpoliceEmail(name, toname, ward, mpEmail):
         Given the evidence emerging from multiple US cities, there is a very real risk of UK-manufactured tear gas or rubber bullets being used against George Floyd protesters in dangerous and highly inappropriate ways - ministers must respond to this.
         Ministers should be making detailed case by case assessments of any requests for equipment from individual US police forces – withholding exports from any that have clearly acted irresponsible during the current crisis. The UK has an obscene track record of looking the other way when UK arms and security equipment is misused overseas. Now is the time to change that.
         In addition to immediate suspension of UK sales of tear gas, riot shields and rubber bullets to the US, the UK Government should condemn Trump's use of force against his own citizens. The behaviour he has exhibited is anti-democratic and cruel. It sets a dangerous precedent and the UK government must acknowledge this.
-        In short, my requests to you are:<br>
-        -   	Immediate stopping of UK sales of teargas, riot shield and rubber bullets to the US<br>
+        In short, my requests to you are:
+        -   	Immediate stopping of UK sales of teargas, riot shield and rubber bullets to the US
         -   	Condemnation of Trump's use of force against his own citizens
         Thank you for your time. Please respond to this email as soon as you see fit.
         Regards,
