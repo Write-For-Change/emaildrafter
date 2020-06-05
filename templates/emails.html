@@ -1,0 +1,13 @@
+{% extends 'page.html' %}
+
+{% block content %}
+<h3>Thank you for your patience.</h3>
+<div style="text-align: center;">
+	{% for e in emails %}
+	<br>
+		<a class="btn btn-dark" href="mailto:{{e['email']}}?subject={{e['subject']}}&body={{e['body']}}" role="button">Email for {{ e['email'] }}</a>
+	<br>
+	{% endfor %}
+</div>
+
+{% endblock %}
