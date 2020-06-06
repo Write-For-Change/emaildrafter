@@ -11,7 +11,7 @@
 		</textarea>
 		<!-- <button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button> -->
 		<a class="btn btn-dark" href="mailto:{{e['email']}}?subject={{e['subject_coded']}}&body={{e['body_coded']}}" role="button">Email for {{ e['email'] }}</a>
-	
+
 		<br>
 	{% endfor %}
 </div>
