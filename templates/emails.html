@@ -5,16 +5,16 @@
 <div style="">
 	{% for e in emails %}
 		<br>
-		<h5 style="color: white;">RE: {{ e['subject'] }}</h5>
+		<h5 style="color: white;">RE: {{ e['subject'] }} to {{ e['email'] }} </h5>
 		<textarea disabled id="email{{loop.index}}" name="Email for {{ e['email'] }}" rows="20" style="width: 100%">
 		{{ e['body'] }}
 		</textarea>
 		<!-- <button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button> -->
-		<a class="btn btn-dark mb-1" href="mailto:{{e['email']}}?subject={{e['subject_coded']}}&body={{e['body_coded']}}" role="button">Send to {{ e['email'] }}</a>
-		<a class="btn btn-danger btn-email mb-1" target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&to={{e['email']}}&su={{e['subject_coded']}}&body={{e['body_coded']}}" role="button">Send with Gmail</a>
+		<a class="btn btn-dark mb-1" href="mailto:{{e['email']}}?subject={{e['subject_coded']}}&body={{e['body_coded']}}" role="button">Open in default email client</a>
+		<a class="btn btn-danger btn-email mb-1" target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&to={{e['email']}}&su={{e['subject_coded']}}&body={{e['body_coded']}}" role="button">Open in Gmail</a>
 
-		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', {{loop.index}}, '{{e['email']}}', '{{e['subject_coded']}}')" role="button">Send with Outlook</a>
-		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e['email']}}', '{{e['subject_coded']}}')"role="button">Send with Yahoo Mail</a>
+		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', {{loop.index}}, '{{e['email']}}', '{{e['subject_coded']}}')" role="button">Open in Outlook</a>
+		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e['email']}}', '{{e['subject_coded']}}')"role="button">Open in Yahoo Mail</a>
 	
 		<br>
 	{% endfor %}
