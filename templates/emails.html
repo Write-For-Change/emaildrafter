@@ -6,19 +6,21 @@
 	{% for e in emails %}
 		<br>
 		<h5 style="color: white;">RE: {{ e['subject'] }}</h5>
-		<textarea id="email{{loop.index}}" name="Email for {{ e['email'] }}" rows="20" style="width: 100%">
+		<textarea disabled id="email{{loop.index}}" name="Email for {{ e['email'] }}" rows="20" style="width: 100%">
 		{{ e['body'] }}
 		</textarea>
-		<button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button>
+		<!-- <button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button> -->
+		<a class="btn btn-dark" href="mailto:{{e['email']}}?subject={{e['subject_coded']}}&body={{e['body_coded']}}" role="button">Email for {{ e['email'] }}</a>
+	
 		<br>
 	{% endfor %}
 </div>
 <script type="text/javascript">
 {% for e in emails %}
-function _{{ loop.index }}() {
-	var link = "mailto:{{e['email']}}?subject={{e['subject_coded']}}&body=" + document.getElementById("email{{loop.index}}").value;
-	window.location.href = link;
-}
+// function _{{ loop.index }}() {
+// 	var link = "mailto:{{e['email']}}?subject={{e['subject_coded']}}&body=" + document.getElementById("email{{loop.index}}").value;
+// 	window.location.href = link;
+// }
 {% endfor %}
 </script>
 {% endblock %}
