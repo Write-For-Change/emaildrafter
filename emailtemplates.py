@@ -7,6 +7,7 @@ ToDo:
     4. Store them in a file
     5. Allow people to submit template ideas
 """
+from copy import deepcopy
 
 
 class EmailTemplate:
@@ -151,4 +152,6 @@ belly_mujinga_govia.set_target(
 
 def get_existing_templates():
     """Grab all the template options that exist so far"""
-    return [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+    return deepcopy(
+        [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+    )
