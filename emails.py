@@ -3,47 +3,9 @@
 # import win32com.client as win32
 import urllib.request, json
 import requests
+import pymongo
 from bs4 import BeautifulSoup
 from emailtemplates import get_existing_templates
-
-
-def getGovDetails(postcode):
-
-    url_base = "http://api.postcodes.io/postcodes/"
-    with urllib.request.urlopen(url_base + postcode) as url:
-        data = json.loads(url.read().decode())
-        if data["status"] == 200:
-            topdata = data["result"]
-        else:
-            raise KeyError("No postcode found!")
-
-    MPurl = (
-        "http://lda.data.parliament.uk/commonsmembers.json?_view=members&_pageSize=2097&_page=0&constituency.label="
-        + "%20".join(topdata["parliamentary_constituency"].split(" "))
-    )
-
-    with urllib.request.urlopen(MPurl) as url:
-        MPdata = json.loads(url.read().decode())
-
-        for possibleMP in MPdata["result"]["items"]:
-            MPid = (possibleMP["_about"]).split("/")[-1]
-            print("Checking MP: {}".format(possibleMP["fullName"]))
-
-            try:
-                MPurl = "https://members.parliament.uk/member/{}/contact".format(MPid)
-                MPemails = emailExtractor(MPurl)  # MP email (in a list)
-                assert len(MPemails) > 0
-                # Quick hack to only return one email
-                MPemail = MPemails[0]
-
-                myward = topdata["admin_ward"]  # User's ward
-                MPname = possibleMP["fullName"]["_value"]
-                print("Found correct MP: {}. Email: {} ".format(MPname, MPemail))
-                break
-            except:
-                pass
-
-    return {"ward": myward, "MPemail": MPemail, "MPname": MPname}
 
 
 def emailExtractor(urlString):
@@ -63,14 +25,37 @@ def emailExtractor(urlString):
     return emailList
 
 
+def getMPDetails(postcode):
+    url_base = "http://api.postcodes.io/postcodes/"
+    with urllib.request.urlopen(url_base + postcode) as url:
+        data = json.loads(url.read().decode())
+        if data["status"] == 200:
+            # Create query from the data retrieved from postcodes.io
+            query = {"constituency": data["result"]["parliamentary_constituency"]}
+        else:
+            raise KeyError("No postcode found!")
+
+    # Tell Python where to look for the database.
+    client = pymongo.MongoClient(
+        "mongodb://heroku_b22mk7d6:mpdj7v335osvtda7c3g3ffo2ao@ds121565.mlab.com:21565/heroku_b22mk7d6"
+    )
+    # Define where the data is stored.
+    mpCollection = client["heroku_b22mk7d6"]["mp_email_list"]
+
+    # Execute the query on the mpCollection
+    mpDetails = mpCollection.find_one(query)
+    # Return a dictionary of the email, name and constituency
+    return mpDetails
+
+
 def draftEmails(myname, postcode):
-    ret = getGovDetails(postcode)
-    ward = ret["ward"]
-    MPname = ret["MPname"]
-    MPemail = ret["MPemail"]
+    ret = getMPDetails(postcode)
+    ward = ret["constituency"]
+    MPname = ret["name"]
+    MPemail = ret["email"]
 
     print(
-        "Details found. You live in {} ward and your MP is {}, with email: {}".format(
+        "Details found. You live in {} constituency and your MP is {}, with email: {}".format(
             ward, MPname, MPemail
         )
     )
