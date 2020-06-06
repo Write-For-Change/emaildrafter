@@ -12,6 +12,6 @@ def landing():
 		postcode = request.form['postcode']
 		postcode = postcode.replace(" ", "")
 		emails = draftEmails(name, postcode)
-		a = [{'email': (e.email), 'subject': parse.quote(e.subject), 'body': parse.quote(e.body)} for e in emails]
+		a = [{'email': (e.email), 'subject_coded': parse.quote(e.subject), 'body_coded': parse.quote(e.body), 'subject': (e.subject), 'body': (e.body)} for e in emails]
 		# return jsonify(a)
 		return render_template('emails.html', emails=a)
