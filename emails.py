@@ -33,18 +33,17 @@ def getGovDetails(postcode):
                 MPurl = "https://members.parliament.uk/member/{}/contact".format(MPid)
                 MPemails = emailExtractor(MPurl)  # MP email (in a list)
                 assert len(MPemails) > 0
+                # Quick hack to only return one email
+                MPemail = MPemails[0]
+
                 myward = topdata["admin_ward"]  # User's ward
                 MPname = possibleMP["fullName"]["_value"]
-                print(
-                    "Found correct MP: {}. {} emails found".format(
-                        MPname, len(MPemails)
-                    )
-                )
+                print("Found correct MP: {}. Email: {} ".format(MPname, MPemail))
                 break
             except:
                 pass
 
-    return {"ward": myward, "MPemail": MPemails, "MPname": MPname}
+    return {"ward": myward, "MPemail": MPemail, "MPname": MPname}
 
 
 def emailExtractor(urlString):
@@ -68,11 +67,11 @@ def draftEmails(myname, postcode):
     ret = getGovDetails(postcode)
     ward = ret["ward"]
     MPname = ret["MPname"]
-    MPemails = ret["MPemail"]
+    MPemail = ret["MPemail"]
 
     print(
-        "Details found. You live in {} ward and your MP is {}, with email(s): {}".format(
-            ward, MPname, MPemails
+        "Details found. You live in {} ward and your MP is {}, with email: {}".format(
+            ward, MPname, MPemail
         )
     )
 
@@ -85,23 +84,19 @@ def draftEmails(myname, postcode):
 
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
-            # If there isn't a defined target, we probably need to find the MP of the person - could move the postcode finder here?
-            print("Need to get information about MP to fill out target of email")
-            # Once implemented, you could update the target of the email template using this function:
-            # e.set_target(name="",email="",ward="")
-            pass
+            # If no defined target, use MP info to fill target fields
+            e.set_target(name=MPname, email=MPemail, ward=ward)
+
+        # ToDo : Implement setting a cc
+
+        # Pass the dictionary containing user information to the template filler
+        success = e.fill(user)  # Returns true if successfully filled
+
+        if success:
+            # Append successful templates to the list we return
+            filled_email_templates.append(e)
         else:
-            print("Filling template with user info")
-            # May want to set a cc if the target is set?
-            # Pass the dictionary containing user information to the template filler
-            success = e.fill(user)
-            # It will return true if completed successfully
-            if success:
-                print("Successfully filled template")
-                # Append successful templates to the list we return
-                filled_email_templates.append(e)
-            else:
-                print("Failed to fill template, passing")
-                pass
+            print("Failed to fill template, subject: {}".format(e.subject))
+            pass
 
     return filled_email_templates
