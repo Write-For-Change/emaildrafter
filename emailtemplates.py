@@ -49,7 +49,8 @@ target_info = {
 
 mp_police = EmailTemplate(
     subject="Suspension of Exportation of Policing Equipment to the US",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
 
 
 My name is {u[name]} and I am a resident of {t[ward]}.
@@ -71,7 +72,8 @@ Regards,
 
 gavinwilliamson_email = EmailTemplate(
     subject="Make Black histories mandatory in the national curriculum",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
 
 
 As supporters of The Black Curriculum, we are dismayed by the events of the last few weeks which have disproportionately affected Black people in the UK - exacerbated by Covid19, and the subsequent lack of response by those in authority. Thousands of us, the British voting public are grief stricken and concerned about the existing status-quo in the UK, which disregards the lives and contributions of Black British people. We would like to bring to your attention some of the structural inequalities in the UK, especially pertaining to education and the national curriculum.
@@ -91,7 +93,8 @@ gavinwilliamson_email.set_target(
 
 belly_mujinga_mp = EmailTemplate(
     subject="Justice for Belly Mujinga",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
 
 My name is {u[name]} and I am a resident of {t[ward]} ward.
 
@@ -114,7 +117,8 @@ Yours sincerely,
 
 belly_mujinga_govia = EmailTemplate(
     subject="Justice for Belly Mujinga",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
 
 I am writing to you in regards to the recent death of Belly Mujinga, who worked for Govia Thameslink Railway. Her death follows after an assault was carried out on 21st March in which her and colleagues were spat at and coughed on during their shift at London Victoria Station.
 
