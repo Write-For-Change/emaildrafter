@@ -66,7 +66,7 @@ In short, my requests to you are:
     - Immediate stopping of UK sales of teargas, riot shield and rubber bullets to the US
     - Condemnation of Trump's use of force against his own citizens
 
-    
+
 Thank you for your time. Please respond to this email as soon as you see fit.
 Regards,
 
