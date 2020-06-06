@@ -2,12 +2,24 @@
 
 {% block content %}
 <h3>Thank you for your patience.</h3>
-<div style="text-align: center;">
+<div style="">
 	{% for e in emails %}
-	<br>
-		<a class="btn btn-dark" href="mailto:{{e['email']}}?subject={{e['subject']}}&body={{e['body']}}" role="button">Email for {{ e['email'] }}</a>
-	<br>
+		<br>
+		<h5>RE: {{ e['subject'] }}</h5>
+		<textarea id="email{{loop.index}}" name="Email for {{ e['email'] }}" rows="20" style="width: 100%">
+		{{ e['body'] }}
+		</textarea>
+		<button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button>
+		<br>
 	{% endfor %}
 </div>
-
+<script type="text/javascript">
+{% for e in emails %}
+function _{{ loop.index }}() {
+	var link = "mailto:{{e['email']}}?subject={{e['subject_coded']}}&body=" + document.getElementById("email{{loop.index}}").value;
+	window.location.href = link;
+	alert('click click {{ loop.index }}');
+}
+{% endfor %}
+</script>
 {% endblock %}

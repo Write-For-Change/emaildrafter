@@ -17,8 +17,10 @@ def landing():
         a = [
             {
                 "email": (e.target["email"]),
-                "subject": parse.quote(e.subject),
-                "body": parse.quote(e.body),
+                "subject_coded": parse.quote(e.subject),
+                "body_coded": parse.quote(e.body),
+                "subject": (e.subject),
+                "body": (e.body),
             }
             for e in emails
         ]
