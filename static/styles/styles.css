@@ -34,16 +34,7 @@ body {
 #top p {
 	text-align: center;
 }
-#bg-text {
-	z-index: -1;
-	opacity: 0.1;
-	width: 100vw;
-	height: 100vh;
-	position: fixed;
-	background-image: url("Asset-1.svg");
-	background-size: cover;
-	background-position: center;
-}
+
 #content {
 	width: 400px;
 	height: 420px;

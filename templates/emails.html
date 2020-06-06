@@ -18,7 +18,6 @@
 function _{{ loop.index }}() {
 	var link = "mailto:{{e['email']}}?subject={{e['subject_coded']}}&body=" + document.getElementById("email{{loop.index}}").value;
 	window.location.href = link;
-	alert('click click {{ loop.index }}');
 }
 {% endfor %}
 </script>
