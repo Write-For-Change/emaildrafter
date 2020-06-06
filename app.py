@@ -27,3 +27,8 @@ def landing():
         ]
         # return jsonify(a)
         return render_template("emails.html", emails=a)
+
+
+@app.route("/aboutus")
+def aboutus():
+    return render_template("aboutus.html")
