@@ -1,18 +1,105 @@
-@charset "UTF-8";
 
-/*baz made it */
+body {
+	margin: 0;
+	min-height: 100vh;
+	background-color:#333;
+	background: -moz-radial-gradient(circle, rgba(85,85,85,1) 0%, rgba(34,34,34,1) 100%);
+	background: -webkit-radial-gradient(circle, rgba(85,85,85,1) 0%, rgba(34,34,34,1) 100%);
+	background: radial-gradient(circle, rgba(85,85,85,1) 0%, rgba(34,34,34,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#555555",endColorstr="#222222",GradientType=1);
+	font-family: sans-serif;
+}
+#top {
+	position: absolute;
+	height: 70px;
+	top: 30px;
+	right: 30px;
+	background-color: #111;
+	border-radius: 40px;
+	color: white;
+	overflow: hidden;
+	transition: 0.2s;
+	z-index: 1;
+}
+#top:hover {
+	background-color: #222;
+	height: 200px;
+}
+#top h1 {
+	margin: auto;
+	padding: 20px 30px;
+	font-family: sans-serif;
+	font-size: 20px;
+}
+#top p {
+	text-align: center;
+}
+#bg-text {
+	z-index: -1;
+	opacity: 0.1;
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	background-image: url("Asset-1.svg");
+	background-size: cover;
+	background-position: center;
+}
+#content {
+	width: 400px;
+	height: 420px;
+	position: absolute;
+	left: calc(50vw - 200px);
+	top: calc(calc(100vh / 2) - 210px);
+	background-color: #ddd;
+	border-radius: 30px;
+	box-shadow: 5px 5px 10px rgba(0,0,0,0.5), -5px -5px 10px rgba(180,180,180,0.5);
+}
+#content h2 {
+	text-color: #222;
+	margin: 50px 0 30px;
+	text-align: center;
+	font-size: 24px;
+}
+#content p {
+	width: 75%;
+	margin: auto;
+}
+form {
+	width: 75%;
+	margin: 20px auto 50px;
+	display: flex;
+	flex-wrap: wrap;
+}
+input[type=text] {
+	width: 100%;
+	margin: 5px 0;
+	padding: 12px 15px;
+	border: none;
+	border-radius: 20px;
+	font-size: 20px;
+	display: inline-flex;
+}
+input[type=submit] {
+	width: 100%;
+	background-color: #FF8000;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 20%;
+	border: none;
+	border-radius: 20px;
+	cursor: pointer;
+	font-size: 20px;
+}
 
-p {
-	color: black;
+input[type=submit]:hover {
+	background-color: #F34B00;
 }
-.wrapper {
-  text-align: center;
-  display: inline-block;
-  left: 50%;
-}
-.btn-group-xs > .btn, .btn-xs {
-  padding: .25rem .4rem;
-  font-size: .875rem;
-  line-height: .5;
-  border-radius: .2rem;
+
+footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	color: #aaa;
 }

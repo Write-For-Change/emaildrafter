@@ -1,11 +1,11 @@
 {% extends 'page.html' %}
 
 {% block content %}
-<h3>Thank you for your patience.</h3>
+<h3 style="color: white;">Thank you for your patience.</h3>
 <div style="">
 	{% for e in emails %}
 		<br>
-		<h5>RE: {{ e['subject'] }}</h5>
+		<h5 style="color: white;">RE: {{ e['subject'] }}</h5>
 		<textarea id="email{{loop.index}}" name="Email for {{ e['email'] }}" rows="20" style="width: 100%">
 		{{ e['body'] }}
 		</textarea>
