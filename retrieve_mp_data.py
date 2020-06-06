@@ -26,16 +26,20 @@ def retrieve_mp_data():
             try:
                 MPdata[full_name].append(row[3].replace(" ", "").replace('"', ''))
             except:
-                print(full_name)
+                # print(full_name)
+                pass
 
-    MPdata_formatted = {}
+    MPdata_formatted = []
+    errors = 0
     for key, value in MPdata.items():
         try:
-            MPdata_formatted[value[0]] = {"name": key, "email": value[1]}
+            MPdata_formatted.append({"name": key, "email": value[1], "constituency": value[0]})
         except:
-            print(key)
+            errors += 1
+            # print(key)
             pass
-    print(len(MPdata_formatted))
+    # print(MPdata_formatted)
+    # print(errors)
     return MPdata_formatted
 
 retrieve_mp_data()
