@@ -12,14 +12,14 @@ You need **Python 3.6** or later.
 
 1.  Create and activate a virtual environment (virtualenv):
 
-    python -m venv venv
-    . ./venv/bin/activate
-    pip install wheel
+        python -m venv venv
+        . ./venv/bin/activate
+        pip install wheel
 
 2.  Install requisite packages into the virtualenv:
 
-    pip install -r requirements.txt -r requirements-dev.txt
-    pre-commit install
+        pip install -r requirements.txt -r requirements-dev.txt
+        pre-commit install
 
 ## The different `requirements` files
 
