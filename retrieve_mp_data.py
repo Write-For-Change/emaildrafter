@@ -1,52 +1,41 @@
 import urllib.request, json
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 def retrieve_mp_data():
 
-    MPs = ["David Swarbrick", "Tai Kirby", "Puria Radmard"]
+    MPdata = {}
 
-    MPurl = (
-        "http://lda.data.parliament.uk/commonsmembers.json?_view=members&_pageSize=2097&_page=0&constituency.label="
-        + "%20".join(topdata["parliamentary_constituency"].split(" "))
-    )
+    MPurl = "http://lda.data.parliament.uk/commonsmembers.json?_view=members&_pageSize=5000&_page=0"
 
     with urllib.request.urlopen(MPurl) as url:
-        MPdata = json.loads(url.read().decode())
+        MPlist = json.loads(url.read().decode())['result']['items']
 
-        for possibleMP in MPdata["result"]["items"]:
-            MPid = (possibleMP["_about"]).split("/")[-1]
-            print("Checking MP: {}".format(possibleMP["fullName"]))
+    for mp in MPlist:
+        constituency = mp["constituency"]["label"]["_value"]
+        fullname = mp["givenName"]["_value"].strip() + " " + mp["familyName"]["_value"].strip()
+        id = (mp["_about"]).split("/")[-1]
 
+        MPdata[fullname] = [constituency]
+
+    with open('190391mpl.csv') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        for row in csv_reader:
+            full_name = row[0].replace('"', '').strip() + " " + row[2].replace('"', '').strip()
             try:
-                MPurl = "https://members.parliament.uk/member/{}/contact".format(MPid)
-                MPemails = emailExtractor(MPurl)  # MP email (in a list)
-                assert len(MPemails) > 0
-                # Quick hack to only return one email
-                MPemail = MPemails[0]
-
-                myward = topdata["admin_ward"]  # User's ward
-                MPname = possibleMP["fullName"]["_value"]
-                print("Found correct MP: {}. Email: {} ".format(MPname, MPemail))
-                break
+                MPdata[full_name].append(row[3].replace(" ", "").replace('"', ''))
             except:
-                pass
+                print(full_name)
 
-    return {"ward": myward, "MPemail": MPemail, "MPname": MPname}
-
-
-def emailExtractor(urlString):
-    emailList = []
-    getH = requests.get(urlString)
-    h = getH.content
-    soup = BeautifulSoup(h, "html.parser")
-    mailtos = soup.select("a[href^=mailto]")
-    for i in mailtos:
-        href = i["href"]
+    MPdata_formatted = {}
+    for key, value in MPdata.items():
         try:
-            str1, str2 = href.split(":")
-        except ValueError:
-            break
+            MPdata_formatted[value[0]] = {"name": key, "email": value[1]}
+        except:
+            print(key)
+            pass
+    print(len(MPdata_formatted))
+    return MPdata_formatted
 
-        emailList.append(str2)
-    return emailList
+retrieve_mp_data()
