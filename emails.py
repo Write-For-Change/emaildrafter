@@ -4,7 +4,7 @@
 import urllib.request, json
 import requests
 from bs4 import BeautifulSoup
-from templates import get_existing_templates
+from emailtemplates import get_existing_templates
 
 
 def getGovDetails(postcode):
