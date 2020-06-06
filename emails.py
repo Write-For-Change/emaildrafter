@@ -46,6 +46,7 @@ def getGovDetails(postcode):
     return {"ward": myward, "MPemail": MPemail, "MPname": MPname}
 
 
+
 def emailExtractor(urlString):
     emailList = []
     getH = requests.get(urlString)

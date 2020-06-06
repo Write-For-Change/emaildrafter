@@ -13,6 +13,7 @@ def landing():
         name = request.form["name"]
         postcode = request.form["postcode"]
         postcode = postcode.replace(" ", "")
+        emails = None
         emails = draftEmails(name, postcode)
         a = [
             {
