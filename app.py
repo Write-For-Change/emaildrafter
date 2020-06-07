@@ -5,8 +5,15 @@ from wtforms.validators import DataRequired, Length
 from emails import draftEmails, validatePostcode
 from urllib import parse
 from secrets import token_bytes
+from address import getAddresses
 
+import logging
 import os
+import sys
+
+app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
 
 try:
     skey = bytes(os.environ['FLASK_SECRET_KEY'], 'utf-8')
@@ -54,3 +61,8 @@ def landing():
 @app.route("/aboutus")
 def aboutus():
     return render_template("aboutus.html")
+
+
+@app.route("/postcode/<postcode>")
+def postcode(postcode):
+    return getAddresses(postcode)

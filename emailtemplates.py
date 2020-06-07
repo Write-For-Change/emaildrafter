@@ -152,6 +152,10 @@ belly_mujinga_govia.set_target(
 
 def get_existing_templates():
     """Grab all the template options that exist so far"""
+    """
+    IMPORTANT: Gavin Williamson template removed until we can find a way to contanct him via his preferred method for enquiries about educations
+    """
     return deepcopy(
-        [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+        #[mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+        [mp_police, belly_mujinga_mp, belly_mujinga_govia]
     )
