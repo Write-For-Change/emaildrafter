@@ -3,6 +3,7 @@
 # import win32com.client as win32
 import urllib.request, json
 import requests
+import pymongo
 import logging
 from bs4 import BeautifulSoup
 from emailtemplates import get_existing_templates
@@ -22,6 +23,7 @@ def validatePostcode(form, field):
     except HTTPError:
         raise ValidationError("Invalid postcode. Please try again.")
         return False
+
 
 
 def getGovDetails(postcode):
@@ -81,17 +83,39 @@ def emailExtractor(urlString):
     return emailList
 
 
+def getMPDetails(postcode):
+    url_base = "http://api.postcodes.io/postcodes/"
+    with urllib.request.urlopen(url_base + postcode) as url:
+        data = json.loads(url.read().decode())
+        if data["status"] == 200:
+            # Create query from the data retrieved from postcodes.io
+            query = {"constituency": data["result"]["parliamentary_constituency"]}
+        else:
+            raise KeyError("No postcode found!")
+
+    # Tell Python where to look for the database.
+    client = pymongo.MongoClient(
+        "mongodb://heroku_b22mk7d6:mpdj7v335osvtda7c3g3ffo2ao@ds121565.mlab.com:21565/heroku_b22mk7d6"
+    )
+    # Define where the data is stored.
+    mpCollection = client["heroku_b22mk7d6"]["mp_email_list"]
+
+    # Execute the query on the mpCollection
+    mpDetails = mpCollection.find_one(query)
+    # Return a dictionary of the email, name and constituency
+    return mpDetails
+
+
 def draftEmails(myname, postcode):
-    ret = getGovDetails(postcode)
-    ward = ret["ward"]
-    MPname = ret["MPname"]
-    MPemail = ret["MPemail"]
+    ret = getMPDetails(postcode)
+    constituency = ret["constituency"]
+    MPname = ret["name"]
+    MPemail = ret["email"]
 
     log.debug(
         "Details found. You live in {} ward and your MP is {}, with email: {}".format(
             ward, MPname, MPemail
-        )
-    )
+
 
     # Empty list of filled templates
     filled_email_templates = []
@@ -103,7 +127,7 @@ def draftEmails(myname, postcode):
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
             # If no defined target, use MP info to fill target fields
-            e.set_target(name=MPname, email=MPemail, ward=ward)
+            e.set_target(name=MPname, email=MPemail, constituency=constituency)
 
         # ToDo : Implement setting a cc
 
