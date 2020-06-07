@@ -113,8 +113,8 @@ def draftEmails(myname, postcode):
     MPemail = ret["email"]
 
     log.debug(
-        "Details found. You live in {} ward and your MP is {}, with email: {}".format(
-            ward, MPname, MPemail
+        "Details found. You live in {} constituency and your MP is {}, with email: {}".format(
+            constituency, MPname, MPemail
         )
     )
 
