@@ -23,8 +23,8 @@ class EmailTemplate:
     def __str__(self):
         return str([self.subject, self.body])
 
-    def set_target(self, name, email, ward=None):
-        self.target = {"name": name, "email": email, "ward": ward}
+    def set_target(self, name, email, constituency=None):
+        self.target = {"name": name, "email": email, "constituency": constituency}
 
     def fill(self, user_info):
         """Fill an unfilled body with provided user information (user_info)"""
@@ -44,7 +44,7 @@ class EmailTemplate:
 user_info = {"name": "John Smith", "postcode": "AB1 2CD"}
 target_info = {
     "name": "Big Bad Government",
-    "ward": "Westminster",
+    "constituency": "Westminster",
     "email": "bigbadboi@hotmail.co.uk",
 }
 
@@ -52,7 +52,7 @@ mp_police = EmailTemplate(
     subject="Suspension of Exportation of Policing Equipment to the US",
     body="""Dear {t[name]},
 
-My name is {u[name]} and I am a resident of {t[ward]}.
+My name is {u[name]} and I am a resident of {t[constituency]}.
 I am writing to you today to implore you to put pressure on the government to stop the exportation of tear gas, rubber bullets and riot shields to the United States and to condemn Trump's use of force against his own citizens.
 After the shocking footage of the police and the national guard using excessive force against Black Lives Matter protesters across the United States, the UK should immediately stop all policing and security equipment export to the US where there is a clear risk of further misuse. This is something the UK is obligated to do under its own laws.
 Given the evidence emerging from multiple US cities, there is a very real risk of UK-manufactured tear gas or rubber bullets being used against George Floyd protesters in dangerous and highly inappropriate ways - ministers must respond to this.
@@ -94,7 +94,7 @@ belly_mujinga_mp = EmailTemplate(
     subject="Justice for Belly Mujinga",
     body="""Dear {t[name]},
 
-My name is {u[name]} and I am a resident of {t[ward]} ward.
+My name is {u[name]} and I am a resident of {t[constituency]}.
 
 I write further to my previous email regarding Black Lives Matter with a specific demand for justice for Belly Mujinga, a railway ticket office worker who contracted COVID-19 and subsequently died. I am sure you are aware that Mujinga, a key worker, was spat on by a member of the public claiming he was infectious on March 21.
 
