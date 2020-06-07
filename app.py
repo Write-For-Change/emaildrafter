@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, jsonify, request, url_for
 from emails import draftEmails
 from urllib import parse
+from address import getAddresses
 
 import logging
 import sys
@@ -36,3 +37,8 @@ def landing():
 @app.route("/aboutus")
 def aboutus():
     return render_template("aboutus.html")
+
+
+@app.route("/postcode/<postcode>")
+def postcode(postcode):
+    return getAddresses(postcode)
