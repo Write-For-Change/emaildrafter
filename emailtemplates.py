@@ -150,8 +150,8 @@ belly_mujinga_govia.set_target(
 )
 
 # Re: The murder of a 12-year-old schoolgirl, Shukri Yahya Abdi.
-shruki_abdi = EmailTemplate(
-    subject="Justice For Shruki Abdi",
+shukri_abdi = EmailTemplate(
+    subject="Justice For Shukri Abdi",
     body="""
 Dear {t[name]},
 
@@ -183,5 +183,5 @@ def get_existing_templates():
     """
     return deepcopy(
         # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
-        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shruki_abdi]
+        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi]
     )
