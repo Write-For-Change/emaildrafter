@@ -16,7 +16,9 @@ def retrieve_mp_data():
 
     for mp in MPlist:
         constituency = mp["constituency"]["label"]["_value"]
-        fullname = mp["givenName"]["_value"].strip() + " " + mp["familyName"]["_value"].strip()
+        fullname = (
+            mp["givenName"]["_value"].strip() + " " + mp["familyName"]["_value"].strip()
+        )
         real_fullname = mp["fullName"]["_value"].strip()
         id = (mp["_about"]).split("/")[-1]
 
@@ -37,7 +39,9 @@ def retrieve_mp_data():
     errors = 0
     for key, value in MPdata.items():
         try:
-            MPdata_formatted.append({"name": value[1], "email": value[2], "constituency": value[0]})
+            MPdata_formatted.append(
+                {"name": value[1], "email": value[2], "constituency": value[0]}
+            )
         except:
             errors += 1
             pass
