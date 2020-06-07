@@ -62,9 +62,10 @@
 
 
 <body>
+<div id="bg-text"></div>
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}" type="text/css">
-<div>
-	<div id="bg-text"></div>
+<div style="margin: auto; width: 85%; padding: 10px">
+
 {% block content %}
 {% endblock %}
 </div>
