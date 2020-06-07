@@ -4,9 +4,18 @@ from wtforms import StringField
 from wtforms.validators import DataRequired, Length
 from emails import draftEmails, validatePostcode
 from urllib import parse
+from secrets import token_bytes
+
+import os
+
+try:
+    skey = bytes(os.environ['FLASK_SECRET_KEY'], 'utf-8')
+except KeyError:
+    # Testing environment
+    skey = token_bytes(16)
 
 app = Flask(__name__)
-app.secret_key = b'5bY4C!9R%aMHATv8rx0bUJB2'
+app.secret_key = skey
 
 class LandingForm(FlaskForm):
     fullname = StringField('Full Name', validators=[DataRequired(), Length(min=3)])
