@@ -115,7 +115,8 @@ def draftEmails(myname, postcode):
     log.debug(
         "Details found. You live in {} ward and your MP is {}, with email: {}".format(
             ward, MPname, MPemail
-
+        )
+    )
 
     # Empty list of filled templates
     filled_email_templates = []
