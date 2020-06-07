@@ -11,7 +11,7 @@ body {
 	background-size: cover;
 	font-family: sans-serif;
 }
-nav {
+/*nav {
 	padding: 30px;
 	top: 40px;
 	right: 40px;
@@ -36,7 +36,7 @@ nav:hover {
 	margin-right: 0 !important;
 	margin: 5px auto;
 	padding: 30px;
-}
+}*/
 
 #content {
 	width: 400px;
@@ -101,7 +101,7 @@ footer a:hover {
 }
 
 
-@media only screen and (orientation: portrait) {
+/*@media only screen and (orientation: portrait) {
 	.navbar {
 		float: none;
 		width: 50%;
@@ -115,4 +115,4 @@ footer a:hover {
 		width: 100%;
 		left: 0;
 	}
-}
+}*/
