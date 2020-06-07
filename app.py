@@ -2,8 +2,12 @@ from flask import Flask, render_template, flash, jsonify, request, url_for
 from emails import draftEmails
 from urllib import parse
 
-app = Flask(__name__)
+import logging
+import sys
 
+app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
