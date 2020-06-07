@@ -9,18 +9,20 @@ from emailtemplates import get_existing_templates
 from urllib.error import HTTPError
 from wtforms.validators import ValidationError
 
-log = logging.getLogger('app')
+log = logging.getLogger("app")
+
 
 def validatePostcode(form, field):
     url_base = "http://api.postcodes.io/postcodes/"
-    postcode = field.data
+    postcode = field.data.replace(" ", "")
     try:
         with urllib.request.urlopen(url_base + postcode) as url:
             data = json.loads(url.read().decode())
             return data["status"] == 200
     except HTTPError:
-        raise ValidationError('Invalid postcode. Please try again.')
+        raise ValidationError("Invalid postcode. Please try again.")
         return False
+
 
 def getGovDetails(postcode):
 
