@@ -34,4 +34,4 @@ def addressExtractor(url):
 
 
 def getAddresses(postcode):
-    return json.dumps(addressExtractor(createQueryURL(postcode)))
+    return sorted(addressExtractor(createQueryURL(postcode)))

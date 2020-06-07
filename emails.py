@@ -7,19 +7,17 @@ import logging
 from bs4 import BeautifulSoup
 from emailtemplates import get_existing_templates
 from urllib.error import HTTPError
-from wtforms.validators import ValidationError
 
 log = logging.getLogger('app')
 
-def validatePostcode(form, field):
+def validatePostcodeApi(postcode):
     url_base = "http://api.postcodes.io/postcodes/"
-    postcode = field.data
+    postcode = postcode.replace(" ", "").upper()
     try:
         with urllib.request.urlopen(url_base + postcode) as url:
             data = json.loads(url.read().decode())
             return data["status"] == 200
     except HTTPError:
-        raise ValidationError('Invalid postcode. Please try again.')
         return False
 
 def getGovDetails(postcode):
@@ -79,7 +77,7 @@ def emailExtractor(urlString):
     return emailList
 
 
-def draftEmails(myname, postcode):
+def draftEmails(myname, postcode, address):
     ret = getGovDetails(postcode)
     ward = ret["ward"]
     MPname = ret["MPname"]
@@ -101,7 +99,7 @@ def draftEmails(myname, postcode):
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
             # If no defined target, use MP info to fill target fields
-            e.set_target(name=MPname, email=MPemail, ward=ward)
+            e.set_target(name=MPname, email=MPemail, ward=ward, address=address)
 
         # ToDo : Implement setting a cc
 
