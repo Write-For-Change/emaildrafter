@@ -55,4 +55,4 @@ Target Info | String for Template
 --- | ---
 Name | `{t[name]}`
 Email | `{t[email]}`
-Ward (soon to be replaced with Constituency)| `{t[ward]}`
+Constituency | `{t[constituency]}`
