@@ -50,13 +50,13 @@ def getMPDetails(postcode):
 
 def draftEmails(myname, postcode):
     ret = getMPDetails(postcode)
-    ward = ret["constituency"]
+    constituency = ret["constituency"]
     MPname = ret["name"]
     MPemail = ret["email"]
 
     print(
         "Details found. You live in {} constituency and your MP is {}, with email: {}".format(
-            ward, MPname, MPemail
+            constituency, MPname, MPemail
         )
     )
 
@@ -70,7 +70,7 @@ def draftEmails(myname, postcode):
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
             # If no defined target, use MP info to fill target fields
-            e.set_target(name=MPname, email=MPemail, ward=ward)
+            e.set_target(name=MPname, email=MPemail, constituency=constituency)
 
         # ToDo : Implement setting a cc
 
