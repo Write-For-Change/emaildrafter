@@ -3,9 +3,11 @@
 # import win32com.client as win32
 import urllib.request, json
 import requests
+import logging
 from bs4 import BeautifulSoup
 from emailtemplates import get_existing_templates
 
+log = logging.getLogger('app')
 
 def getGovDetails(postcode):
 
@@ -15,6 +17,7 @@ def getGovDetails(postcode):
         if data["status"] == 200:
             topdata = data["result"]
         else:
+            log.debug(f"Invalid postcode {postcode}")
             raise KeyError("No postcode found!")
 
     MPurl = (
@@ -27,7 +30,7 @@ def getGovDetails(postcode):
 
         for possibleMP in MPdata["result"]["items"]:
             MPid = (possibleMP["_about"]).split("/")[-1]
-            print("Checking MP: {}".format(possibleMP["fullName"]))
+            log.debug("Checking MP: {}".format(possibleMP["fullName"]))
 
             try:
                 MPurl = "https://members.parliament.uk/member/{}/contact".format(MPid)
@@ -38,7 +41,7 @@ def getGovDetails(postcode):
 
                 myward = topdata["admin_ward"]  # User's ward
                 MPname = possibleMP["fullName"]["_value"]
-                print("Found correct MP: {}. Email: {} ".format(MPname, MPemail))
+                log.debug("Found correct MP: {}. Email: {} ".format(MPname, MPemail))
                 break
             except:
                 pass
@@ -69,7 +72,7 @@ def draftEmails(myname, postcode):
     MPname = ret["MPname"]
     MPemail = ret["MPemail"]
 
-    print(
+    log.debug(
         "Details found. You live in {} ward and your MP is {}, with email: {}".format(
             ward, MPname, MPemail
         )
@@ -96,7 +99,7 @@ def draftEmails(myname, postcode):
             # Append successful templates to the list we return
             filled_email_templates.append(e)
         else:
-            print("Failed to fill template, subject: {}".format(e.subject))
+            log.debug("Failed to fill template, subject: {}".format(e.subject))
             pass
 
     return filled_email_templates
