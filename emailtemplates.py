@@ -50,7 +50,9 @@ target_info = {
 
 mp_police = EmailTemplate(
     subject="Suspension of Exportation of Policing Equipment to the US",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
+
 
 My name is {u[name]} and I am a resident of {t[constituency]}.
 I am writing to you today to implore you to put pressure on the government to stop the exportation of tear gas, rubber bullets and riot shields to the United States and to condemn Trump's use of force against his own citizens.
@@ -60,8 +62,10 @@ Ministers should be making detailed case by case assessments of any requests for
 In addition to immediate suspension of UK sales of tear gas, riot shields and rubber bullets to the US, the UK Government should condemn Trump's use of force against his own citizens. The behaviour he has exhibited is anti-democratic and cruel. It sets a dangerous precedent and the UK government must acknowledge this.
 In short, my requests to you are:
 
+
     - Immediate stopping of UK sales of teargas, riot shield and rubber bullets to the US
     - Condemnation of Trump's use of force against his own citizens
+
 
 Thank you for your time. Please respond to this email as soon as you see fit.
 Regards,
@@ -73,7 +77,9 @@ Regards,
 
 gavinwilliamson_email = EmailTemplate(
     subject="Make Black histories mandatory in the national curriculum",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
+
 
 As supporters of The Black Curriculum, we are dismayed by the events of the last few weeks which have disproportionately affected Black people in the UK - exacerbated by Covid19, and the subsequent lack of response by those in authority. Thousands of us, the British voting public are grief stricken and concerned about the existing status-quo in the UK, which disregards the lives and contributions of Black British people. We would like to bring to your attention some of the structural inequalities in the UK, especially pertaining to education and the national curriculum.
 As you are aware, the national curriculum excludes Black histories throughout, and omits the vast contributions Black people have made to the UK. As a result, young people who learn from the national curriculum are not given a full or accurate version of British history, which limits their opportunities and futures in an increasingly diverse landscape. Despite numerous calls over the years to reform the national curriculum to incorporate Black histories, these requests have been denied. Learning Black history should not be a choice but should be mandatory. Our curriculum should not be reinforcing the message that a sizeable part of the British population are not valued.
@@ -92,7 +98,8 @@ gavinwilliamson_email.set_target(
 
 belly_mujinga_mp = EmailTemplate(
     subject="Justice for Belly Mujinga",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
 
 My name is {u[name]} and I am a resident of {t[constituency]}.
 
@@ -115,7 +122,8 @@ Yours sincerely,
 
 belly_mujinga_govia = EmailTemplate(
     subject="Justice for Belly Mujinga",
-    body="""Dear {t[name]},
+    body="""
+Dear {t[name]},
 
 I am writing to you in regards to the recent death of Belly Mujinga, who worked for Govia Thameslink Railway. Her death follows after an assault was carried out on 21st March in which her and colleagues were spat at and coughed on during their shift at London Victoria Station.
 
@@ -144,6 +152,10 @@ belly_mujinga_govia.set_target(
 
 def get_existing_templates():
     """Grab all the template options that exist so far"""
+    """
+    IMPORTANT: Gavin Williamson template removed until we can find a way to contanct him via his preferred method for enquiries about educations
+    """
     return deepcopy(
-        [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+        #[mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+        [mp_police, belly_mujinga_mp, belly_mujinga_govia]
     )

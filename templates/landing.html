@@ -5,14 +5,21 @@
 	<h2>Write to your MP.</h2>
 	<p>We just need some information so we can generate the emails for you. We'll never share your details with anyone else.</p>
 	<form method="post">
+		{{ form.csrf_token() }}
 		<div class="form-group" style="width: 100%">
-			<input class="form-control" id="name" name="name" placeholder="Full Name">
+			{{ form.fullname(class_="form-control", placeholder="Full Name") }}
+			{% for error in form.fullname.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
 		</div>
 		<div class="form-group" style="width: 100%">
-			<input class="form-control" id="Postcode" name="postcode" placeholder="UK Postcode only">
+			{{ form.postcode(class_="form-control", placeholder="Postcode") }}
+			{% for error in form.postcode.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
 		</div>
 		<div style="text-align: center; width: 100%">
-			<button  type="submit" class="btn btn-dark">Generate the emails for me</button>
+			<button type="submit" class="btn btn-dark">Generate the emails for me</button>
 		</div>
 	</form>
 </div>
