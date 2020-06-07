@@ -149,6 +149,32 @@ belly_mujinga_govia.set_target(
     name="Patrick Verwer", email="Patrick.Verwer@gtrailway.com"
 )
 
+# Re: The murder of a 12-year-old schoolgirl, Shukri Yahya Abdi.
+shruki_abdi = EmailTemplate(
+    subject="Justice For Shruki Abdi",
+    body="""
+Dear {t[name]},
+
+As your constituent, I am writing to call upon you to take action against Hazel Wood High School for concerning patterns of failures to protect both staff and pupils from bullying, resulting in deaths; and Greater Manchester Police for failing to properly investigate the murder of Shukri Abdi due to institutionalised racism. We demand justice for Shukri Abdi.
+
+The body of Shukri, who first came to the UK in January 2017 as a refugee seeking a better life, was found in the River Irwell in Bury, Greater Manchester in June 2019. An inquest heard that Shukri had been threatened by her class peer/s and told: “if you don’t get into the water, I’m going to kill you”. I am utterly beyond outraged, saddened and disappointed that children in our society can be so badly let down and failed. Shukri has been described as an “angelic, funny and kind-hearted little girl” that had much to offer.
+
+There are very concerning patterns of failure to meet adequate safeguarding measures at Hazel Wood High School, who has since rebranded from Broad Oak Sports College. The latest Ofsted report concluded that the school was “inadequate” and has thus since been put on “special measures” by Her Majesty’s Chief Inspector, per section 44(1) of the Education Act 2005. Shurki has been woefully failed by Hazel Wood High School. Their incompetence can be argued to have played a key role in the murder of Shurki. Additionally, Manchester Evening News reported that in 2015 a “senior teacher, Caroline Bailey, at Broad Oak Sports College” (Hazel Wood High School) had committed suicide; an inquest heard that this was, yet again, due to “strategic bullying” from co-workers within the school. I urge you to raise these concerning patterns of failure to safeguard against bullying, resulting in deaths, at Hazel Wood High School, with the Secretary of State for Education, Gavin Williamson.
+
+Furthermore, Greater Manchester Police (GMP) must also be investigated for their ineptitude in investigating this murder, no less a sign of institutionalised racism that has failed yet another black life. Reports show that the Officers at the scene of the murder took witness statements from only two out of four present at Shukri’s death. Her murder was ruled by GMP to be an accident within two weeks. One can argue that Shukri’s murder has not been properly investigated due to her ethnic background and, therefore, has led to my loss of confidence in the impartiality of the GMP in serving to protect and uphold justice for all citizens. I urge you to raise these concerns with the Mayor of Manchester, Andy Burnham.
+
+Moreover, Shukri’s death can also be placed in a wider landscape of institutional racism within modern-day Britain. Yvette Cooper, Labour MP and chair of the home affairs select committee damned the “deeply unfair shambles” of how asylum seekers are accommodated. The Guardian analysis of Home Office data found that “more than half of all asylum seekers (57%) housed by the government are done so in the poorest third of the country”. I trust that we can agree that we must do more to support the most vulnerable in our society and that these statistics are wholly unacceptable.
+
+As you are well aware of the global outrage against injustices rooted in systemic and perpetual institutionalised racism, I leave you with the words of human rights activist and organiser of the protests demanding justice for Shukri Abdi, Bashir Ibrahim: “she was failed when she was alive and she’s still being failed now as she’s dead”.
+
+I look forward to your urgent response,
+
+Yours sincerely,
+
+{u[name]}
+""",
+)
+
 
 def get_existing_templates():
     """Grab all the template options that exist so far"""
@@ -156,6 +182,6 @@ def get_existing_templates():
     IMPORTANT: Gavin Williamson template removed until we can find a way to contanct him via his preferred method for enquiries about educations
     """
     return deepcopy(
-        #[mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
-        [mp_police, belly_mujinga_mp, belly_mujinga_govia]
+        # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shruki_abdi]
     )
