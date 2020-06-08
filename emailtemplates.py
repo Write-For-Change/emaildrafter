@@ -24,8 +24,14 @@ class EmailTemplate:
         return str([self.subject, self.body])
 
     def set_target(self, name, email, constituency=None, address=None):
-        if not address: address = "[ENTER YOUR ADDRESS HERE]"
-        self.target = {"name": name, "email": email, "constituency": constituency, "address": address}
+        if not address:
+            address = "[ENTER YOUR ADDRESS HERE]"
+        self.target = {
+            "name": name,
+            "email": email,
+            "constituency": constituency,
+            "address": address,
+        }
 
     def fill(self, user_info):
         """Fill an unfilled body with provided user information (user_info)"""
@@ -183,7 +189,20 @@ def get_existing_templates():
     """
     IMPORTANT: Gavin Williamson template removed until we can find a way to contanct him via his preferred method for enquiries about educations
     """
-    return deepcopy(
-        # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
-        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi]
+
+    client = pymongo.MongoClient(
+        "mongodb://heroku_b22mk7d6:mpdj7v335osvtda7c3g3ffo2ao@ds121565.mlab.com:21565/heroku_b22mk7d6?retryWrites=false"
     )
+    # Define where the data is stored.
+    email_template_db = client["heroku_b22mk7d6"]["email_templates"]
+
+    # Returns an array of JSON objects from the email_templates collection.
+    emails = email_template_db.find()
+
+    # This needs to be an array of EmailTemplate objects.
+    return emails
+
+    # return deepcopy(
+    #     # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
+    #     [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi]
+    # )
