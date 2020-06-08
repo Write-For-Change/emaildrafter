@@ -39,7 +39,7 @@ def landing():
             {
                 "email": (e.target["email"]),
                 "subject_coded": parse.quote(e.subject),
-                "body_coded": parse.quote(e.body),
+                "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
                 "subject": (e.subject),
                 "body": (e.body),
             }
