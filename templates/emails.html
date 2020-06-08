@@ -1,9 +1,9 @@
 {% extends 'page.html' %}
 
 {% block content %}
-<h3 style="color: white;">Thank you for your patience.</h3>
-<p style="color: white;">Please keep in mind that the filled templates below should be a starting point, but we suggest you personalise them and add your home address so that your MP is more likely to respond (and so that it won't be rejected by spam filters)</p>
-<div style="">
+<h3 style="color: white;">Thank you for making your voice heard.</h3>
+<p style="color: white;">Please keep in mind that the filled templates below should be a starting point. We strongly suggest you personalise them so that your MP is more likely to respond (and so that it won't be rejected by spam filters).</p>
+<div>
 	{% for e in emails %}
 		<br>
 		<h5 style="color: white;">RE: {{ e['subject'] }} to {{ e['email'] }} </h5>
