@@ -61,7 +61,7 @@ mp_police = EmailTemplate(
 Dear {t[name]},
 
 
-My name is {u[name]} and I am a resident of {t[constituency]}, at {t[address]}.
+My name is {u[name]} and I am a resident of {t[constituency]} constituency, at {u[address]}.
 
 I am writing to you today to implore you to put pressure on the government to stop the exportation of tear gas, rubber bullets and riot shields to the United States and to condemn Trump's use of force against his own citizens.
 After the shocking footage of the police and the national guard using excessive force against Black Lives Matter protesters across the United States, the UK should immediately stop all policing and security equipment export to the US where there is a clear risk of further misuse. This is something the UK is obligated to do under its own laws.
@@ -98,7 +98,8 @@ Will you meet with the leaders of the Black Curriculum? They are ready and waiti
 
 With thanks,
 
-{u[name]}""",
+{u[name]}
+    """,
 )
 gavinwilliamson_email.set_target(
     name="Secretary of State for Education", email="gavin.williamson.mp@parliament.uk"
@@ -109,7 +110,7 @@ belly_mujinga_mp = EmailTemplate(
     body="""
 Dear {t[name]},
 
-My name is {u[name]} and I am a resident of {t[constituency]}, at {t[address]}.
+My name is {u[name]} and I am a resident of {t[constituency]} constituency, at {u[address]}.
 
 I write further to my previous email regarding Black Lives Matter with a specific demand for justice for Belly Mujinga, a railway ticket office worker who contracted COVID-19 and subsequently died. I am sure you are aware that Mujinga, a key worker, was spat on by a member of the public claiming he was infectious on March 21.
 
@@ -125,7 +126,8 @@ I urge the UK government to seek to reopen the investigation into the assault on
 
 Yours sincerely,
 
-{u[name]}""",
+{u[name]}
+    """,
 )
 
 belly_mujinga_govia = EmailTemplate(
@@ -151,7 +153,8 @@ Until responsible actions are taken to honour the death of Belly and prevent the
 
 Regards,
 
-{u[name]}""",
+{u[name]}
+    """,
 )
 belly_mujinga_govia.set_target(
     name="Patrick Verwer", email="Patrick.Verwer@gtrailway.com"
@@ -163,7 +166,7 @@ shukri_abdi = EmailTemplate(
     body="""
 Dear {t[name]},
 
-As your constituent, I am writing to call upon you to take action against Hazel Wood High School for concerning patterns of failures to protect both staff and pupils from bullying, resulting in deaths; and Greater Manchester Police for failing to properly investigate the murder of Shukri Abdi due to institutionalised racism. We demand justice for Shukri Abdi.
+As your constituent living in {t[constituency]}, I am writing to call upon you to take action against Hazel Wood High School for concerning patterns of failures to protect both staff and pupils from bullying, resulting in deaths; and Greater Manchester Police for failing to properly investigate the murder of Shukri Abdi due to institutionalised racism. We demand justice for Shukri Abdi.
 
 The body of Shukri, who first came to the UK in January 2017 as a refugee seeking a better life, was found in the River Irwell in Bury, Greater Manchester in June 2019. An inquest heard that Shukri had been threatened by her class peer/s and told: “if you don’t get into the water, I’m going to kill you”. I am utterly beyond outraged, saddened and disappointed that children in our society can be so badly let down and failed. Shukri has been described as an “angelic, funny and kind-hearted little girl” that had much to offer.
 
@@ -180,7 +183,80 @@ I look forward to your urgent response,
 Yours sincerely,
 
 {u[name]}
-""",
+{u[address]}
+    """,
+)
+
+mp_solidarity = EmailTemplate(
+    subject="Request for Solidarity",
+    body="""
+Dear {t[name]},  
+
+
+My name is {u[name]} and I am one of your constituents, living at {u[address]}. I am writing to ask you to support your Black constituents and the Black community globally.
+
+Matt Hancock on 2/6/2020 said that “Black Lives Matter” but we can only take this statement as lip service until the following actions take place. We need you to act as our advocate and:
+
+1) Demand the immediate suspension of UK sales of teargas, rubber bullets, and riot shields to the US. This is to prevent the UK condoning the use of excessive and militarised force in policing Black people in the US.
+2) Demand explicit condemnation of President Trump’s incitement of violence among US citizens and the police’s use of brutal force and physical violence against protesters.
+3) Demand explicit condemnation of the UK police’s use of brutal force and physical violence against protesters.
+4) Start an inquiry into why BAME people are disproportionately affected by the COVID-19 virus.
+5) Demand justice for Belly Mujinga who was working on the front lines during this pandemic. She was assaulted by being spat at and coughed on. I would like you to demand an investigation into why Govia Thameslink did not provide Ms Mujinga with PPE despite their knowledge of her health conditions.
+
+This is only a short list of possible actions you could take to protect and better the lives of the Black community, and sustained advocacy and active allyship is essential. This government’s continued complacency is violence and the endorsement of the oppression of Black people worldwide. History will look back at your actions during this time, just as we look to you now for leadership.
+
+I would appreciate it if I received some form of response or acknowledgement to these concerns. Thank you in advance for your help with this matter and please keep me informed of any progress.
+
+I look forward to hearing your response in due course.
+
+Yours sincerely,
+
+{u[name]}
+    """,
+)
+
+mp_lgsmigrants = EmailTemplate(
+    subject="Racial Inequality in the UK",
+    body="""
+Dear {t[name]},
+
+I write to you as a resident of {t[constituency]} concerning state-sanctioned violence against Black people around the world, including here in the UK. This is not exclusively an American problem. The protests in the US in reaction to George Floyd’s murder coincide with the publication of Public Health England’s ‘Disparities in the risk and outcomes of COVID-19’ report, which states that “Death rates from COVID-19 were highest among people of Black and Asian ethnic groups”. The report concedes that this is the result of racial inequalities in the UK. In light of this, I ask that you take action on the UK’s complicity regarding the situation in the US and on other examples of structural racism closer to home, including those related to COVID-19.
+
+    1. Regarding UK exportation of tear gas and rubber bullets to the US:
+
+I support Black Lives Matter UK (BLMUK) and the Labour party’s condemnation of the violent response by the US government and police forces towards protestors. I also ask that you recognise the UK’s complicity in this violence through the sale of munitions to the US, and that you pressure the UK government to cease its export of rubber bullets, tear gas, riot shields and all other weapons that are being used against civilians in the US. 
+
+    2. Regarding police violence in the UK:
+
+Police brutality and a lack of accountability is not unique to the US. Between 1990 and 2019 there were 1,741 deaths in police custody or following contact with the police in England and Wales, yet the last time a British police officer was convicted for a death in custody was in 1969. Private security firms contracted by the government are no less at fault. In 2010, Jimmy Mubenga was killed on a deportation flight by a G4S security guard; like George Floyd and Eric Garner, his final words were “I can’t breathe.” I ask that you pressure the UK government to hold the police and privately contracted security firms fully accountable for their actions, and that the government devise an action plan that will ensure an end to police brutality and institutional racism. 
+
+    3. Regarding the Public Health England (PHE) report “Disparities in the risk and outcomes of COVID-19” and structural racism in the UK:
+
+The PHE report indicates that people from BAME backgrounds have been disproportionately affected by COVID-19 in the UK in part as a result of being more likely to live in urban/deprived areas and overcrowded households and to be in jobs that present a higher risk of exposure. Echoing another BLMUK demand, I ask that you pressure the UK government to provide a detailed response plan to the findings in this report, and in particular to the ways in which it lays bare the structural racism, reinforced by government policy, that is implicated in these deaths.
+
+    4. Regarding the Hostile Environment, migrant rights and access to healthcare:
+
+Though the PHE report mentions “cultural and language differences” as a barrier to accessing health services, it fails to address the manner in which Hostile Environment healthcare charging policies have demonstrably deterred migrants, many of whom are BAME, from accessing the NHS. Though treatment for infectious diseases like COVID-19 is exempt from charging, mistrust of healthcare settings, concerns around data sharing and fear about charges relating to other conditions can deter migrants from seeking treatment. Just last month, The Independent reported the case of Elvis, a Filipino man in the UK who died from the coronavirus after being too afraid to seek care.
+
+I echo Patients Not Passports in calling for an end to NHS charging for migrants and a moratorium on all data sharing with the Home Office. The government must launch an information campaign to alert migrant communities of their rights to ensure that nobody is deterred from seeking care. In addition, a firewall should be established to ensure that all data gathered in the process of providing urgent services, ranging from healthcare to housing, cannot be used for the purposes of immigration control.
+
+    5. Regarding workplace safety practices and accountability under COVID-19:
+
+Following the death of Belly Mujinga, I join her husband Lusamba Katalay in asking that you and your party demand an investigation into Govia Thameslink Railway (GTR) regarding workplace safety and provision of PPE. GTR knew that Ms. Mujinga had underlying health problems. Yet they continued to place her on the front lines of the virus, without appropriate PPE and seemingly without concern for her safety or the safety of her co-workers.
+
+I therefore also ask that the government require employers of essential workers to provide PPE and appropriately safeguard those at risk or with household members at higher risk of complications from the virus, such as by supporting paid leave or alternative work arrangements. I join the Transport Salaried Staffs’ Association (TSSA) in requesting an expansion of the Coronavirus Compensation Scheme to include not only care workers but also transport workers, and also ask that this be extended to all key workers.
+
+    6. Regarding the systemic oppression of BAME communities through Government policy:
+
+Though these coronavirus deaths are not as obvious as a case in which a police officer is filmed in the act of murder, the state is still responsible for deaths caused by systemic exclusion, disenfranchisement, underfunding and neglect fueled by racism and unconscious bias. As this month marks the 3-year anniversary of the Grenfell Tower fire, another example of indirect state violence against BAME and poor/working class people in the UK, I demand those responsible for the fire be held accountable and demand an end to policies like stop and search, Prevent and No Recourse to Public Funds (NRPF) that disproportionately neglect, underfund, and criminalise BAME communities.
+
+Please let me know the actions that you and your party plan to put in place in response to these demands.
+
+Yours sincerely,
+
+{u[name]}
+{u[address]}
+    """,
 )
 
 
@@ -191,5 +267,5 @@ def get_existing_templates():
     """
     return deepcopy(
         # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
-        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi]
+        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi, mp_solidarity, mp_lgsmigrants]
     )
