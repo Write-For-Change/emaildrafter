@@ -23,7 +23,6 @@ def validatePostcodeApi(postcode):
         return False
 
 
-
 def getGovDetails(postcode):
 
     url_base = "http://api.postcodes.io/postcodes/"
@@ -118,7 +117,7 @@ def draftEmails(myname, postcode, address):
 
     # Empty list of filled templates
     filled_email_templates = []
-    # Get all the empty templates from templates.py
+    # Get all the empty templates from the database.
     empty_email_templates = get_existing_templates()
     # Set the user dictionary to include the name of the person sending
     user = {"name": myname}
@@ -126,7 +125,9 @@ def draftEmails(myname, postcode, address):
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
             # If no defined target, use MP info to fill target fields
-            e.set_target(name=MPname, email=MPemail, constituency=constituency, address=address)
+            e.set_target(
+                name=MPname, email=MPemail, constituency=constituency, address=address
+            )
 
         # ToDo : Implement setting a cc
 
