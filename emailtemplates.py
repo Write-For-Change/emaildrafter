@@ -147,7 +147,7 @@ Further, why did it take weeks for Govia to surrender the CCTV footage to the po
 
 As a concerned individual I urge you to recognise the needs of more effective regulations and protection of railway workers at Govia Thameslink Rail during this time and for an assault similar to that of Ms Mujinga which effectively cost her life does not take place again.
 
-Until responsible actions are taken to honour the death of Belly and prevent the future assault of your workers and you take full responsibility for your role in Belly's murder, I have decided to boycott southern rail, Gatwick express, Great northern and Thameslink.
+Until responsible actions are taken to honour the death of Belly and prevent the future assault of your workers and you take full responsibility for your role in Belly's murder, I have decided to boycott Southern Rail, Gatwick Express, Great Northern and Thameslink.
 
 Regards,
 
