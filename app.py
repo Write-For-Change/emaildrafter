@@ -1,4 +1,5 @@
 from flask import Flask, render_template, flash, jsonify, request, url_for, make_response
+from flask_talisman import Talisman
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import DataRequired, Length
@@ -12,10 +13,6 @@ import logging
 import os
 import sys
 
-app = Flask(__name__)
-app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.DEBUG)
-
 try:
     skey = bytes(os.environ['FLASK_SECRET_KEY'], 'utf-8')
 except KeyError:
@@ -24,6 +21,18 @@ except KeyError:
 
 app = Flask(__name__)
 app.secret_key = skey
+
+csp = {
+    'default-src': '\'self\'',
+    'img-src': '*',
+    'media-src': '*',
+    'script-src': '*'
+}
+
+Talisman(app, strict_transport_security=False, content_security_policy=csp)
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
