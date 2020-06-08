@@ -28,6 +28,7 @@ from secrets import token_bytes
 from address import get_addresses
 from slugify import slugify
 
+import emailtemplates
 import json
 import logging
 import os
