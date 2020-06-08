@@ -8,6 +8,7 @@ ToDo:
     5. Allow people to submit template ideas
 """
 from copy import deepcopy
+import pymongo
 
 
 class EmailTemplate:
@@ -198,9 +199,16 @@ def get_existing_templates():
 
     # Returns an array of JSON objects from the email_templates collection.
     emails = email_template_db.find()
+    templates = []
 
-    # This needs to be an array of EmailTemplate objects.
-    return emails
+    for e in emails:
+        # Iterate through emails and create EmailTemplate objects
+        templates.append(
+            EmailTemplate(subject=e["email_subject"], body=e["email_body"])
+        )
+
+    # Need to fill Target fields on some templates
+    return templates
 
     # return deepcopy(
     #     # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
