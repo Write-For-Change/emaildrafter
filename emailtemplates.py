@@ -168,13 +168,17 @@ def add_new_template(reference, subject, body, target=None):
     # Define where the data is stored.
     email_template_db = client["heroku_b22mk7d6"]["email_templates"]
 
-    # ToDo: Check if reference already exists, and update if so
-
-    # ToDo: Parse body to change new lines to \n
-
-    template_row = {
-        "email_reference": reference,
-        "email_subject": subject,
-        "email_body": body,
-    }
-    email_template_db.insert_one(template_row)
+    # Check if reference already exists, and update if so.
+    if email_template_db.find_one({"email_reference": reference}):
+        return False
+    else:
+        # Parse body to change new lines to \n.
+        # I don't know why the below works, but it really do work.
+        body = body.replace("\n", "\n")
+        template_row = {
+            "email_reference": reference,
+            "email_subject": subject,
+            "email_body": body,
+        }
+        email_template_db.insert_one(template_row)
+        return True
