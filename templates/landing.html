@@ -5,21 +5,21 @@
 	<h2>Write to your MP.</h2>
 	<p>We just need some information so we can generate the emails for you. We'll never share your details with anyone else.</p>
 	<form method="post">
-		{{ form.csrf_token() }}
 		<div class="form-group" style="width: 100%">
-			{{ form.fullname(class_="form-control", placeholder="Full Name") }}
-			{% for error in form.fullname.errors %}
-            <span style="color: darkred;">{{ error }}</span>
-            {% endfor %}
+			<input class="form-control" id="name" name="name" placeholder="Full Name" minlength="3" required>
 		</div>
-		<div class="form-group" style="width: 100%">
-			{{ form.postcode(class_="form-control", placeholder="Postcode") }}
-			{% for error in form.postcode.errors %}
-            <span style="color: darkred;">{{ error }}</span>
-            {% endfor %}
+		<div id="postcode-group" class="form-group" style="width: 100%">
+			<input class="form-control" id="postcode" name="postcode" placeholder="UK postcode" required>
 		</div>
 		<div style="text-align: center; width: 100%">
-			<button type="submit" class="btn btn-dark">Generate the emails for me</button>
+			<button type="button" id="findAddress" class="btn btn-dark">Find address</button>
+		</div>
+		<div id="address-group" class="form-group" style="width: 100%; display: none;">
+			<span>Select your address:</span>
+			<select class="form-control" id="address" name="address" required></select>
+		</div>
+		<div style="text-align: center; width: 100%">
+			<button id="submit" type="submit" class="btn btn-dark">Generate the emails for me</button>
 		</div>
 	</form>
 </div>
