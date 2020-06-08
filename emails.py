@@ -121,12 +121,12 @@ def draftEmails(myname, postcode, address):
     # Get all the empty templates from templates.py
     empty_email_templates = get_existing_templates()
     # Set the user dictionary to include the name of the person sending
-    user = {"name": myname}
+    user = {"name": myname, "address": address}
 
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
             # If no defined target, use MP info to fill target fields
-            e.set_target(name=MPname, email=MPemail, constituency=constituency, address=address)
+            e.set_target(name=MPname, email=MPemail, constituency=constituency)
 
         # ToDo : Implement setting a cc
 
