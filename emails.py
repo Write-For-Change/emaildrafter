@@ -5,8 +5,8 @@ import urllib.request, json
 import requests
 import pymongo
 import logging
+import emailtemplates
 from bs4 import BeautifulSoup
-from emailtemplates import get_existing_templates
 from urllib.error import HTTPError
 
 log = logging.getLogger("app")
@@ -119,7 +119,7 @@ def draftEmails(myname, postcode, address):
     # Empty list of filled templates
     filled_email_templates = []
     # Get all the empty templates from templates.py
-    empty_email_templates = get_existing_templates()
+    empty_email_templates = emailtemplates.get_existing_templates()
     # Set the user dictionary to include the name of the person sending
     user = {"name": myname}
 
@@ -141,3 +141,10 @@ def draftEmails(myname, postcode, address):
             pass
 
     return filled_email_templates
+
+'''
+def createTemplate(args):
+    # Handle data
+    emailtemplates.add_new_template(...) --> emailtemplates.py:add_new_template(...)
+    return
+'''

@@ -1,0 +1,76 @@
+{% extends 'page.html' %}
+
+{% block content %}
+<div id="content">
+    <h2>Submit a new template.</h2>
+    <p>Please fill in the form below to submit a new template for our website.</p>
+    <form method="post">
+        {{ form.csrf_token }}
+        <div class="form-group" style="width: 100%">
+            {{ form.name(class_="form-control", placeholder="Your name") }}
+            {% if form.name.errors %}
+            {% for error in form.name.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group" style="width: 100%">
+            {{ form.email(class_="form-control", placeholder="Your email address") }}
+            {% if form.email.errors %}
+            {% for error in form.email.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group" style="width: 100%">
+            {{ form.target_name(class_="form-control", placeholder="Recipient name") }}
+            {% if form.target_name.errors %}
+            {% for error in form.target_name.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group" style="width: 100%">
+            {{ form.target_email(class_="form-control", placeholder="Recipient email address") }}
+            {% if form.target_email.errors %}
+            {% for error in form.target_email.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group" style="width: 100%">
+            {{ form.target_subject(class_="form-control", placeholder="Email subject") }}
+            {% if form.target_subject.errors %}
+            {% for error in form.target_subject.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group" style="width: 100%">
+            {{ form.target_body(class_="form-control", placeholder="Email template") }}
+            {% if form.target_body.errors %}
+            {% for error in form.target_body.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% if form.recaptcha %}
+        <div class="form-group" style="width: 100%">
+            {{ form.recaptcha }}
+            {% if form.recaptcha.errors %}
+            {% for error in form.recaptcha.errors %}
+            <span style="color: darkred;">{{ error }}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="form-group" style="width: 100%">
+            <button id="submit-template" type="submit" class="btn btn-dark">Submit template</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+{% endblock %}
