@@ -2,7 +2,6 @@ import urllib.request, json
 import requests
 from bs4 import BeautifulSoup
 import csv
-import pymongo
 
 
 def retrieve_mp_data():
@@ -46,13 +45,3 @@ def retrieve_mp_data():
             errors += 1
             pass
     return MPdata_formatted
-
-
-client = pymongo.MongoClient(
-    "mongodb://heroku_b22mk7d6:mpdj7v335osvtda7c3g3ffo2ao@ds121565.mlab.com:21565/heroku_b22mk7d6?retryWrites=false"
-)
-# Define where the data is stored.
-mpCollection = client["heroku_b22mk7d6"]["mp_email_list"]
-
-# Execute the query on the mpCollection
-mpDetails = mpCollection.insert_many(retrieve_mp_data())
