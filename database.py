@@ -47,16 +47,10 @@ class myDb:
         return self.uri
 
     def get_db_client(self):
-        if self.client == None:
-            raise ValueError("You must set a URI")
-        else:
-            return self.client
+        return self.client
 
     def get_db_collection(self, collection_name):
-        if self.client == None:
-            raise ValueError("You need to set a URI")
-        else:
-            return self.client[self.db_name][collection_name.replace(" ", "_")]
+        return self.client[self.db_name][collection_name.replace(" ", "_")]
 
     def get_one(self, collection, query):
         return self.get_db_collection(collection).find_one(query)
