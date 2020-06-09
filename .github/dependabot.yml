@@ -1,0 +1,12 @@
+# Dependabot configuration for puria-radmard/emaildrafter
+#
+# Configuration options documented at:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "daily"
+      time: "06:00"
