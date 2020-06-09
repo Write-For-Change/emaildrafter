@@ -141,7 +141,7 @@ Following the outcome in regards to Ms. Mujinga’s death and The British Transp
 
 In spite of the assault carried out and Ms. Mujinga’s passing it was reported by The Independent in an article released on 14th May by a worker at London Victoria station that “There’s not much being done to check all the staff, today is the first day we have had masks.” Going forward, it shows that you have not prioritised the protection and the safety of your staff to prevent such an act happening again in the future.
 
-So I ask, why did you ignore Belly’s requests to work away from crowds during the pandemic as she had underlaying health issues?
+So I ask, why did you ignore Belly’s requests to work away from crowds during the pandemic as she had underlying health issues?
 
 Further, why did it take weeks for Govia to surrender the CCTV footage to the police?
 
