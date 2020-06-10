@@ -36,10 +36,14 @@ class myDb:
     uri = None
     db_name = None
 
-    def __init__(self, uri=os.environ["MONGODB_URI"]):
-        if self.uri == None:
+    def __init__(self, uri=None):
+        if self.uri is None:
             load_dotenv()
             self.uri = os.getenv("MONGODB_URI")
+        if not self.uri:
+            raise ValueError(
+                "MongoDB URI not provided to constructor nor specified in MONGODB_URI envvar"
+            )
         self.client = pymongo.MongoClient(uri)
         self.db_name = re.findall("heroku_[a-z|1-9]*", self.uri)[0]
 
