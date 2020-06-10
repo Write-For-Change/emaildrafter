@@ -3,5 +3,6 @@ Flask
 Flask-WTF
 gunicorn
 pymongo
+python-dotenv
 requests
 wtforms
