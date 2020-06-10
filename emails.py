@@ -3,13 +3,16 @@
 # import win32com.client as win32
 import urllib.request, json
 import requests
-import pymongo
 import logging
 from bs4 import BeautifulSoup
 from emailtemplates import get_existing_templates
 from urllib.error import HTTPError
+from database import myDb
 
 log = logging.getLogger("app")
+
+# Instantiate the db
+mongo = myDb()
 
 
 def validatePostcodeApi(postcode):
@@ -21,7 +24,6 @@ def validatePostcodeApi(postcode):
             return data["status"] == 200
     except HTTPError:
         return False
-
 
 
 def getGovDetails(postcode):
@@ -91,17 +93,7 @@ def getMPDetails(postcode):
         else:
             raise KeyError("No postcode found!")
 
-    # Tell Python where to look for the database.
-    client = pymongo.MongoClient(
-        "mongodb://heroku_b22mk7d6:mpdj7v335osvtda7c3g3ffo2ao@ds121565.mlab.com:21565/heroku_b22mk7d6"
-    )
-    # Define where the data is stored.
-    mpCollection = client["heroku_b22mk7d6"]["mp_email_list"]
-
-    # Execute the query on the mpCollection
-    mpDetails = mpCollection.find_one(query)
-    # Return a dictionary of the email, name and constituency
-    return mpDetails
+    return mongo.get_one("mp_email_list", query)
 
 
 def draftEmails(myname, postcode, address):
@@ -126,7 +118,9 @@ def draftEmails(myname, postcode, address):
     for e in empty_email_templates:  # For each empty template
         if e.target is None:
             # If no defined target, use MP info to fill target fields
-            e.set_target(name=MPname, email=MPemail, constituency=constituency, address=address)
+            e.set_target(
+                name=MPname, email=MPemail, constituency=constituency, address=address
+            )
 
         # ToDo : Implement setting a cc
 
