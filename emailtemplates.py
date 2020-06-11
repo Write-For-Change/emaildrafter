@@ -7,7 +7,10 @@ ToDo:
     4. Store them in a file
     5. Allow people to submit template ideas
 """
-from copy import deepcopy
+from database import myDb
+
+# Instantiate the db
+mongo = myDb()
 
 
 class EmailTemplate:
@@ -23,14 +26,12 @@ class EmailTemplate:
     def __str__(self):
         return str([self.subject, self.body])
 
-    def set_target(self, name, email, constituency=None, address=None):
-        if not address:
-            address = "[ENTER YOUR ADDRESS HERE]"
+    def set_target(self, name, email, constituency=None):
+
         self.target = {
             "name": name,
             "email": email,
             "constituency": constituency,
-            "address": address,
         }
 
     def fill(self, user_info):
@@ -42,13 +43,21 @@ class EmailTemplate:
             # Target not set, so cannot fill
             self.filled = False
             return self.filled
+        try:
+            address = user_info["address"]
+        except:
+            address = "[ENTER YOUR ADDRESS HERE]"
+            user_info["address"] = address
         self.body = self.body.format(t=self.target, u=user_info)
         self.filled = True
         return self.filled
 
 
 # For Reference this is what I would expect our information about the user and target to look like
-user_info = {"name": "John Smith", "postcode": "AB1 2CD"}
+user_info = {
+    "name": "John Smith",
+    "address": "1 Test Road, Somewhere,",
+}
 target_info = {
     "name": "Big Bad Government",
     "constituency": "Westminster",
@@ -189,7 +198,32 @@ def get_existing_templates():
     """
     IMPORTANT: Gavin Williamson template removed until we can find a way to contanct him via his preferred method for enquiries about educations
     """
-    return deepcopy(
-        # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
-        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi]
-    )
+    # Returns an array of JSON objects from the email_templates collection.
+    emails = mongo.get_all("email_templates")
+    templates = []
+
+    for e in emails:
+        # Iterate through emails and create EmailTemplate objects
+        templates.append(
+            EmailTemplate(subject=e["email_subject"], body=e["email_body"])
+        )
+
+    # Need to fill Target fields on some templates
+    return templates
+
+
+def add_new_template(reference, subject, body, target=None):
+    # Check if reference already exists, and update if so.
+    if mongo.get_one("email_templates", {"email_reference": reference}):
+        return False
+    else:
+        # Parse body to change new lines to \n.
+        # I don't know why the below works, but it really do work.
+        body = body.replace("\n", "\n")
+        template_row = {
+            "email_reference": reference,
+            "email_subject": subject,
+            "email_body": body,
+        }
+        mongo.insert_one("email_templates", template_row)
+        return True

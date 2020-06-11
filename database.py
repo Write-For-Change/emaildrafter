@@ -59,3 +59,9 @@ class myDb:
 
     def get_one(self, collection, query):
         return self.get_db_collection(collection).find_one(query)
+
+    def get_all(self, collection):
+        return self.get_db_collection(collection).find()
+
+    def insert_one(self, collection, row):
+        return self.get_db_collection(collection).insert_one(row)
