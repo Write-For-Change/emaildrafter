@@ -101,7 +101,7 @@ With thanks,
 {u[name]}""",
 )
 gavinwilliamson_email.set_target(
-    name="Secretary of State for Education", email="gavin.williamson.mp@parliament.uk"
+    name="Secretary of State for Education", email="Sec-OF-STATE.PS@education.gov.uk"
 )
 
 belly_mujinga_mp = EmailTemplate(
@@ -191,5 +191,5 @@ def get_existing_templates():
     """
     return deepcopy(
         # [mp_police, gavinwilliamson_email, belly_mujinga_mp, belly_mujinga_govia]
-        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi]
+        [mp_police, belly_mujinga_mp, belly_mujinga_govia, shukri_abdi, gavinwilliamson_email]
     )
