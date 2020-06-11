@@ -1,103 +1,11 @@
-# -*- coding: utf-8 -*-
-
-# import win32com.client as win32
-import urllib.request, json
-import requests
-import logging
-from bs4 import BeautifulSoup
 from emailtemplates import get_existing_templates
-from urllib.error import HTTPError
-from database import myDb
+from mpdetails import get_mp_details
 
 log = logging.getLogger("app")
 
-# Instantiate the db
-mongo = myDb()
-
-
-def validatePostcodeApi(postcode):
-    url_base = "http://api.postcodes.io/postcodes/"
-    postcode = postcode.replace(" ", "").upper()
-    try:
-        with urllib.request.urlopen(url_base + postcode) as url:
-            data = json.loads(url.read().decode())
-            return data["status"] == 200
-    except HTTPError:
-        return False
-
-
-def getGovDetails(postcode):
-
-    url_base = "http://api.postcodes.io/postcodes/"
-    with urllib.request.urlopen(url_base + postcode) as url:
-        data = json.loads(url.read().decode())
-        if data["status"] == 200:
-            topdata = data["result"]
-        else:
-            log.debug(f"Invalid postcode {postcode}")
-            raise KeyError("No postcode found!")
-
-    MPurl = (
-        "http://lda.data.parliament.uk/commonsmembers.json?_view=members&_pageSize=2097&_page=0&constituency.label="
-        + "%20".join(topdata["parliamentary_constituency"].split(" "))
-    )
-
-    with urllib.request.urlopen(MPurl) as url:
-        MPdata = json.loads(url.read().decode())
-
-        for possibleMP in MPdata["result"]["items"]:
-            MPid = (possibleMP["_about"]).split("/")[-1]
-            log.debug("Checking MP: {}".format(possibleMP["fullName"]))
-
-            try:
-                MPurl = "https://members.parliament.uk/member/{}/contact".format(MPid)
-                MPemails = emailExtractor(MPurl)  # MP email (in a list)
-                assert len(MPemails) > 0
-                # Quick hack to only return one email
-                MPemail = MPemails[0]
-
-                myward = topdata["admin_ward"]  # User's ward
-                MPname = possibleMP["fullName"]["_value"]
-                log.debug("Found correct MP: {}. Email: {} ".format(MPname, MPemail))
-                break
-            except:
-                pass
-
-    return {"ward": myward, "MPemail": MPemail, "MPname": MPname}
-
-
-def emailExtractor(urlString):
-    emailList = []
-    getH = requests.get(urlString)
-    h = getH.content
-    soup = BeautifulSoup(h, "html.parser")
-    mailtos = soup.select("a[href^=mailto]")
-    for i in mailtos:
-        href = i["href"]
-        try:
-            str1, str2 = href.split(":")
-        except ValueError:
-            break
-
-        emailList.append(str2)
-    return emailList
-
-
-def getMPDetails(postcode):
-    url_base = "http://api.postcodes.io/postcodes/"
-    with urllib.request.urlopen(url_base + postcode) as url:
-        data = json.loads(url.read().decode())
-        if data["status"] == 200:
-            # Create query from the data retrieved from postcodes.io
-            query = {"constituency": data["result"]["parliamentary_constituency"]}
-        else:
-            raise KeyError("No postcode found!")
-
-    return mongo.get_one("mp_email_list", query)
-
 
 def draftEmails(myname, postcode, address):
-    ret = getMPDetails(postcode)
+    ret = get_mp_details(postcode)
     constituency = ret["constituency"]
     MPname = ret["name"]
     MPemail = ret["email"]
