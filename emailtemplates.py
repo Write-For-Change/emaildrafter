@@ -70,7 +70,7 @@ mp_police = EmailTemplate(
 Dear {t[name]},
 
 
-My name is {u[name]} and I am a resident of {t[constituency]}, at {t[address]}.
+My name is {u[name]} and I am a resident of {t[constituency]}, at {u[address]}.
 
 I am writing to you today to implore you to put pressure on the government to stop the exportation of tear gas, rubber bullets and riot shields to the United States and to condemn Trump's use of force against his own citizens.
 After the shocking footage of the police and the national guard using excessive force against Black Lives Matter protesters across the United States, the UK should immediately stop all policing and security equipment export to the US where there is a clear risk of further misuse. This is something the UK is obligated to do under its own laws.
@@ -118,7 +118,7 @@ belly_mujinga_mp = EmailTemplate(
     body="""
 Dear {t[name]},
 
-My name is {u[name]} and I am a resident of {t[constituency]}, at {t[address]}.
+My name is {u[name]} and I am a resident of {t[constituency]}, at {u[address]}.
 
 I write further to my previous email regarding Black Lives Matter with a specific demand for justice for Belly Mujinga, a railway ticket office worker who contracted COVID-19 and subsequently died. I am sure you are aware that Mujinga, a key worker, was spat on by a member of the public claiming he was infectious on March 21.
 
