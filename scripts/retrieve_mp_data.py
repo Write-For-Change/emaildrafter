@@ -6,15 +6,6 @@ from urllib.error import HTTPError
 
 
 ###################### These aren't used anymore but may be used for a future thing if MPs aren't in the database ###############################
-def validatePostcodeApi(postcode):
-    url_base = "http://api.postcodes.io/postcodes/"
-    postcode = postcode.replace(" ", "").upper()
-    try:
-        with urllib.request.urlopen(url_base + postcode) as url:
-            data = json.loads(url.read().decode())
-            return data["status"] == 200
-    except HTTPError:
-        return False
 
 
 def getGovDetails(postcode):

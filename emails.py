@@ -5,6 +5,17 @@ import logging
 log = logging.getLogger("app")
 
 
+def validatePostcodeApi(postcode):
+    url_base = "http://api.postcodes.io/postcodes/"
+    postcode = postcode.replace(" ", "").upper()
+    try:
+        with urllib.request.urlopen(url_base + postcode) as url:
+            data = json.loads(url.read().decode())
+            return data["status"] == 200
+    except HTTPError:
+        return False
+
+
 def draftEmails(myname, postcode, address):
     ret = get_mp_details(postcode)
     constituency = ret["constituency"]
