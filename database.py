@@ -30,6 +30,12 @@ class myDb:
 
     get_one(collection, query)
         Returns a cursor containing all the items from the collection that match the query.
+
+    get_all(collection):
+        Returns a cursor pointing to all of the items in a collection.
+
+    insert_one(collection,row):
+        Inserts the row into the chosen collection.
     """
 
     client = None
@@ -63,5 +69,11 @@ class myDb:
     def get_all(self, collection):
         return self.get_db_collection(collection).find()
 
+    def get_all_matching(self, collection, query):
+        return self.get_db_collection(collection).find(query)
+
     def insert_one(self, collection, row):
         return self.get_db_collection(collection).insert_one(row)
+
+    def update_one(self, collection, query, row):
+        return self.get_db_collection(collection).find_one_and_update(query, row)
