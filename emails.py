@@ -1,3 +1,5 @@
+from urllib.error import HTTPError
+import urllib.request, json
 from emailtemplates import get_existing_templates
 from mpdetails import get_mp_details
 import logging
@@ -43,13 +45,18 @@ def draftEmails(myname, postcode, address):
         # ToDo : Implement setting a cc
 
         # Pass the dictionary containing user information to the template filler
-        success = e.fill(user)  # Returns true if successfully filled
+        try:
+            success = e.fill(user)  # Returns true if successfully filled
 
-        if success:
-            # Append successful templates to the list we return
-            filled_email_templates.append(e)
-        else:
-            log.debug("Failed to fill template, subject: {}".format(e.subject))
+            if success:
+                # Append successful templates to the list we return
+                filled_email_templates.append(e)
+        except AttributeError:
+            log.debug("Target set incorrectly, failed to fill template")
+            pass
+        except KeyError as err:
+            # Template not filled due to error in either template or user dict
+            log.debug(err)
             pass
 
     return filled_email_templates
