@@ -1,5 +1,6 @@
 from emailtemplates import get_existing_templates
 from mpdetails import get_mp_details
+import logging
 
 log = logging.getLogger("app")
 
