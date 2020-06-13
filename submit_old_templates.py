@@ -25,6 +25,8 @@ Regards,
 
 {u[name]}
     """,
+    "name": "Suspend Police Equipment Exports",
+    "topics": ["black-lives-matter"],
 }
 
 
