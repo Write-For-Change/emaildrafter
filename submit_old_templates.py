@@ -1,4 +1,4 @@
-from emailtemplates import EmailTemplate, add_or_update_template
+from emailtemplates import add_or_update_template
 
 mp_police = {
     "subject": "Suspension of Exportation of Policing Equipment to the US",
@@ -34,6 +34,7 @@ Regards,
 
 
 gavinwilliamson_email = {
+    "name": "National Curriculum Change",
     "subject": "Make Black histories mandatory in the national curriculum",
     "body": """
 Dear {t[name]},
@@ -56,6 +57,7 @@ gavinwilliamson_email["target"] = {
 }
 
 belly_mujinga_mp = {
+    "name": "Belly Mujinga - MP",
     "subject": "Justice for Belly Mujinga",
     "body": """
 Dear {t[name]},
@@ -81,6 +83,7 @@ Yours sincerely,
 
 
 belly_mujinga_govia = {
+    "name": "Belly Mujinga - Govia",
     "subject": "Justice for Belly Mujinga",
     "body": """
 Dear {t[name]},
@@ -112,6 +115,7 @@ belly_mujinga_govia["target"] = {
 
 
 shukri_abdi = {
+    "name": "Justice for Shukri Abdi",
     "subject": "Justice For Shukri Abdi",
     "body": """
 Dear {t[name]},
@@ -143,4 +147,4 @@ for t in [
     belly_mujinga_govia,
     shukri_abdi,
 ]:
-    add_or_update_template(t)
+    add_or_update_template(**t)

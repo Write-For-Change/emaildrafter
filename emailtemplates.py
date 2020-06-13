@@ -213,7 +213,7 @@ def pre_database_template_validation(**template_dict):
 
 def add_or_update_template(**t):
     # Check if template using this name already exists, and update if so.
-    template_dict = pre_database_template_validation(t)
+    template_dict = pre_database_template_validation(**t)
     existing_template = mongo.get_one(
         "email_templates", {"name": template_dict["name"]}
     )

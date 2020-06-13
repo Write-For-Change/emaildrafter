@@ -78,7 +78,7 @@ class TestEmailTemplate(unittest.TestCase):
             with self.subTest(b=b):
                 # Delete the "b" field
                 del dict[b]
-                # Email Template generation should succeed successfully
+                # Email Template generation should succeed
                 et = EmailTemplate(**dict)
 
     def test_generate_user_fields(self):
