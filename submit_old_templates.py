@@ -27,6 +27,7 @@ Regards,
     """,
     "name": "Suspend Police Equipment Exports",
     "topics": ["black-lives-matter"],
+    "public": True,
 }
 
 
@@ -79,6 +80,7 @@ I urge the UK government to seek to reopen the investigation into the assault on
 Yours sincerely,
 
 {u[name]}""",
+    "public": True,
 }
 
 
@@ -107,6 +109,7 @@ Until responsible actions are taken to honour the death of Belly and prevent the
 Regards,
 
 {u[name]}""",
+    "public": True,
 }
 belly_mujinga_govia["target"] = {
     "name": "Patrick Verwer",
@@ -138,6 +141,7 @@ Yours sincerely,
 
 {u[name]}
 """,
+    "public": True,
 }
 
 for t in [

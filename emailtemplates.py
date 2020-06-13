@@ -145,11 +145,11 @@ class EmailTemplate:
 
     def _validate_user_info(self, user_info):
         for key in self.fields_used["user"]:
-            if key in user_info:
-                pass
-            elif key == "address":
+            if key == "address" and user_info[key] is None:
                 # Handle people who don't give their address
                 user_info["address"] = "[INPUT YOUR ADDRESS HERE]"
+            if key in user_info:
+                pass
             else:
                 raise KeyError("Template requires key not present in user info.")
         return user_info
@@ -190,12 +190,13 @@ def get_existing_templates(query=None, only_public=True):
     templates = []
     for e in emails:
         # Iterate through emails and create EmailTemplate objects
+        et = EmailTemplate(**e)
         if only_public:
-            if e["public"]:
+            if et.public:
                 # Only append public templates
-                templates.append(EmailTemplate(**e))
+                templates.append(et)
         else:
-            templates.append(EmailTemplate(**e))
+            templates.append(et)
 
     return templates
 

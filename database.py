@@ -76,4 +76,4 @@ class myDb:
         return self.get_db_collection(collection).insert_one(row)
 
     def update_one(self, collection, query, row):
-        return self.get_db_collection(collection).find_one_and_update(query, row)
+        return self.get_db_collection(collection).replace_one(query, row)
