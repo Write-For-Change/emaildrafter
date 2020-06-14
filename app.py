@@ -95,6 +95,24 @@ def display_template():
         return render_template("single_email.html", email=email_template)
 
 
+@app.route("/<template_id>", methods=["GET", "POST"])
+def display_template():
+    if request.method == "GET":
+        return render_template("landing.html")
+    else:
+        name = request.form["name"]
+        postcode = request.form["postcode"].replace(" ", "")
+        address = request.form.get("address")
+        email_template = {}
+
+        try:
+            email_template = mongo.get_one("email_templates", {"tag": template_id})
+        except:
+            # Maybe return an error page / return to homepage
+            raise KeyError
+        return render_template("single_email.html", email=email_template)
+
+
 @app.route("/aboutus")
 def aboutus():
     return render_template("aboutus.html")
