@@ -1,4 +1,14 @@
-from flask import Flask, render_template, flash, jsonify, request, url_for, make_response, request, redirect
+from flask import (
+    Flask,
+    render_template,
+    flash,
+    jsonify,
+    request,
+    url_for,
+    make_response,
+    request,
+    redirect,
+)
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import DataRequired, Length
@@ -17,27 +27,29 @@ app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.DEBUG)
 
 try:
-    skey = bytes(os.environ['FLASK_SECRET_KEY'], 'utf-8')
+    skey = bytes(os.environ["FLASK_SECRET_KEY"], "utf-8")
 except KeyError:
     # Testing environment
     skey = token_bytes(16)
 
 app.secret_key = skey
 
+
 @app.before_request
 def force_https():
-        criteria = [
-            app.debug,
-            request.is_secure,
-            request.headers.get('X-Forwarded-Proto', 'http') == 'https',
-        ]
+    criteria = [
+        app.debug,
+        request.is_secure,
+        request.headers.get("X-Forwarded-Proto", "http") == "https",
+    ]
 
-        if not any(criteria):
-            if request.url.startswith('http://'):
-                url = request.url.replace('http://', 'https://', 1)
-                code = 301
-                r = redirect(url, code=code)
-                return r
+    if not any(criteria):
+        if request.url.startswith("http://"):
+            url = request.url.replace("http://", "https://", 1)
+            code = 301
+            r = redirect(url, code=code)
+            return r
+
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
@@ -66,6 +78,7 @@ def landing():
 @app.route("/aboutus")
 def aboutus():
     return render_template("aboutus.html")
+
 
 @app.route("/postcode/<postcode>")
 def postcode(postcode):
