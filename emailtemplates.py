@@ -201,6 +201,11 @@ def get_existing_templates(query=None, only_public=True):
     return templates
 
 
+def get_templates_by_topic(topic, only_public=False):
+    """Get templates that match a specific topic"""
+    return get_existing_templates({"topics": topic})
+
+
 def pre_database_template_validation(**template_dict):
     """Check the template dictionary is valid before sending to database"""
     try:

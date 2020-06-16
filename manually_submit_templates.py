@@ -36,6 +36,7 @@ Regards,
 
 gavinwilliamson_email = {
     "name": "National Curriculum Change",
+    "topics": ["black-lives-matter"],
     "subject": "Make Black histories mandatory in the national curriculum",
     "body": """
 Dear {t[name]},
@@ -60,6 +61,7 @@ gavinwilliamson_email["target"] = {
 belly_mujinga_mp = {
     "name": "Belly Mujinga - MP",
     "subject": "Justice for Belly Mujinga",
+    "author_url": "https://docs.google.com/document/d/1P7owSv_blKdVaAzII-ySKpk1Vo7w2c_mpE4wUSmRPBQ/edit#heading=h.xvqvign7bp33",
     "body": """
 Dear {t[name]},
 
@@ -86,6 +88,7 @@ Yours sincerely,
 
 belly_mujinga_govia = {
     "name": "Belly Mujinga - Govia",
+    "topics": ["black-lives-matter"],
     "subject": "Justice for Belly Mujinga",
     "body": """
 Dear {t[name]},
@@ -119,6 +122,7 @@ belly_mujinga_govia["target"] = {
 
 shukri_abdi = {
     "name": "Justice for Shukri Abdi",
+    "topics": ["black-lives-matter"],
     "subject": "Justice For Shukri Abdi",
     "body": """
 Dear {t[name]},
@@ -144,11 +148,58 @@ Yours sincerely,
     "public": True,
 }
 
+# Gender Recognition Act Templates
+
+vanity_project_gra = {
+    "name": "Vanity Project GRA Template",
+    "topics": ["gender-reform-act"],
+    "subject": "Gender Reform Act Withdrawal",
+    "author_url": "https://www.facebook.com/story.php?story_fbid=2799692286983914&id=1701399066813247",
+    "more_info_url": "https://www.stonewall.org.uk/truth-about-trans#trans-people-britain",
+    "body": """
+Dear {t[name]},
+
+I hope you’re well. As one of your constituents, I am writing to ask that you stand against plans to scrap reform of of the Gender Recognition Act and protect the rights of transgender women and nonbinary people to use female public toilets and women’s refuges’.
+
+I was horrified to read about this planned legislation in the news (please see article linked here: https://www.theguardian.com/uk-news/2020/jun/14/trans-rights-government-reported-to-be-dropping-gender-self-identifying-plans). This terrifying step backwards in the progress of basic human rights for transgender people pupports to be in favour of protecting cisgender women’s safety. However, there is absolutely no evidence that this legislation will do this and, in most cases, this is being used in order disguise pure bigotry against transgender people.
+
+One of the main arguments used against allowing transgender people the right to self identify as their gender is that it will increase violence towards cisgender women from men. The logic is that it will allow violent and abusive men to ‘self identify’ as women, purely in order to gain access to safe female spaces, such as public toilets and women’s refuge centres.
+
+However, I have not been able to find a single piece of evidence that this has been the case in any areas where trans women are allowed to self identify. In a 2018 Stonewall report (link: https://www.stonewall.org.uk/system/files/stonewall_and_nfpsynergy_report.pdf), after extensive interviews with domestic and sexual abuse support services in the UK, it was found that there was ‘a clear consensus
+that services’ thorough risk assessment procedures would safeguard against this. These
+participants said that gender recognition reform would not compromise their ability to protect
+their service against, or turn away, any abusive or disruptive individual.’
+
+At the same time, scrapping reform of the gender recognition act and banning transgender women from using women’s bathrooms and domestic abuse refuge centres, will cause immense harm to the transgender community.
+
+Firstly, transgender people having to go through long, complicated and often expensive processes with medical professionals in order to have their gender legally recognised is extremely destructive to their mental health. One study found transgender people are almost ten times as likely to commit suicide as cisgender people.
+
+Secondly, not allowing transgender women to access safe spaces for women will cause an increase in violence towards transgender women. Domestic abuse towards trans women is extremely common. This report (https://www.scottishtrans.org/wp-content/uploads/2013/03/trans_domestic_abuse.pdf) found that 80% of the transgender women they surveyed had experienced emotionally, sexually, or physically abusive behaviour by a partner or ex-partner. Public bathrooms are also a common site for abuse and hate crimes towards transgender women.
+
+To put it bluntly, people will die because of this legislation. They will kill themselves and they will be beaten to death.
+
+The transgender community is small and disempowered. Trans people face high rates of unemployment and incarceration all over the world. Depression is rife in the community and many avoid public life all together for threat of violence and exclusion. There are no transgender MPs in the UK.
+
+I urge you to stand up for the rights of transgender people in parliment. They desperately need allies, now more than ever.
+
+Thankyou and I hope to hear from you.
+
+All the best,
+
+Yours sincerely,
+
+{u[name]}
+""",
+    "public": False,
+}
+
+
 for t in [
     mp_police,
     gavinwilliamson_email,
     belly_mujinga_mp,
     belly_mujinga_govia,
     shukri_abdi,
+    vanity_project_gra,
 ]:
     add_or_update_template(**t)

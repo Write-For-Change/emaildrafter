@@ -12,7 +12,8 @@ from flask import (
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import DataRequired, Length
-from emails import draftEmails, validatePostcodeApi
+from emails import draft_all_emails, validatePostcodeApi, draft_specific_templates
+from emailtemplates import get_templates_by_topic
 from urllib import parse
 from secrets import token_bytes
 from address import getAddresses
@@ -60,7 +61,7 @@ def landing():
         name = request.form["name"]
         postcode = request.form["postcode"].replace(" ", "")
         address = request.form.get("address")
-        emails = draftEmails(name, postcode, address)
+        emails = draft_all_emails(name, postcode, address)
         a = [
             {
                 "email": (e.target["email"]),
@@ -86,3 +87,32 @@ def postcode(postcode):
         return json.dumps(getAddresses(postcode))
     else:
         return make_response({"error": "Invalid postcode"}, 400)
+
+
+@app.route("/topic/<topic>", methods=["GET", "POST"])
+def landing_single_topic(topic):
+    matching_templates = get_templates_by_topic(topic)
+    if len(matching_templates) == 0:
+        return make_response({"error": "Topic Not Found"}, 404)
+    else:
+        if request.method == "GET":
+            # ToDo: Need to make a topic-specific landing page
+            return render_template("landing.html")
+        else:
+            name = request.form["name"]
+            postcode = request.form["postcode"].replace(" ", "")
+            address = request.form.get("address")
+            emails = draft_specific_templates(
+                matching_templates, name, postcode, address
+            )
+            a = [
+                {
+                    "email": (e.target["email"]),
+                    "subject_coded": parse.quote(e.subject),
+                    "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
+                    "subject": (e.subject),
+                    "body": (e.body),
+                }
+                for e in emails
+            ]
+            return render_template("emails.html", emails=a)
