@@ -5,6 +5,7 @@ import csv
 from pprint import pprint
 from database import myDb
 
+# URL to list of current cabinet members
 cabinet_url = "https://members.parliament.uk/Government/Cabinet"
 
 # Instantiate the db
@@ -21,12 +22,20 @@ def get_minister_names():
     get_html = requests.get(cabinet_url)
     html = get_html.content
     soup = BeautifulSoup(html, "html.parser")
+    # Get a list containing each cabinet member's information
     minister_list = soup.select("#tab-pane > div > div")
 
+    """
+    Loop through the list and make sure the cabinet_data dict's keys are all valid
+    departments.
+    """
     for minister in minister_list:
         department = minister.contents[1].text.strip()
         cabinet_data[department] = []
 
+    """
+    Loop through the list again and add each cabinet member is added to the correct array.
+    """
     for minister in minister_list:
         department = minister.contents[1].text.strip()
         cabinet_data[department].append(
@@ -39,6 +48,18 @@ def get_minister_names():
             .contents[3]
             .text.strip()
         )
+
+    """
+    Create an array of the final department that will be inserted into the db.
+
+    example:
+
+    cabinet_department = {
+        id: integer - For identification
+        name: string - Name of department
+        staff: array<string> - A list of the names of MPs who work in the department
+    }
+    """
     count = 1
     dept_array = []
     for department in cabinet_data.keys():
@@ -52,6 +73,10 @@ def get_minister_names():
 
 
 def get_db_id(cabinet_office):
+    """
+    This function goes through the list of MPs and replaces the list of strings
+    with the corresponding MP ID from the database.
+    """
     array = []
     for department, minister_list in cabinet_office.items():
         for minister in minister_list:
@@ -64,8 +89,3 @@ def get_db_id(cabinet_office):
             minister_list.remove(minister)
             minister_list.append(id)
     return cabinet_office
-
-
-print(get_minister_names())
-
-# mongo.insert_many("mp_cabinet",set_up_id(get_db_id(get_minister_names())))
