@@ -203,7 +203,7 @@ def get_existing_templates(query=None, only_public=True):
 
 def get_templates_by_topic(topic, only_public=False):
     """Get templates that match a specific topic"""
-    return get_existing_templates({"topics": topic})
+    return get_existing_templates({"topics": topic}, only_public)
 
 
 def pre_database_template_validation(**template_dict):
