@@ -110,14 +110,7 @@ def landing_single_topic(topic):
             postcode = request.form["postcode"].replace(" ", "")
             address = request.form.get("address")
             emails = draft_templates(matching_templates, name, postcode, address)
-            a = [
-                {
-                    "email": (e.target["email"]),
-                    "subject_coded": parse.quote(e.subject),
-                    "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
-                    "subject": (e.subject),
-                    "body": (e.body),
-                }
-                for e in emails
-            ]
-            return render_template("emails.html", emails=a)
+            topic_capitalised = topic.replace("-", " ").title()
+            return render_template(
+                "emails-one-topic.html", emails=emails, topic=topic_capitalised
+            )

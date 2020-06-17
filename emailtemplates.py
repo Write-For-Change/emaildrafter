@@ -5,6 +5,7 @@ Written by David Swarbrick (davidswarbrick) 2020
 """
 import logging
 import re
+from urllib.parse import quote
 from database import myDb
 from mpdetails import get_mp_details
 
@@ -84,6 +85,14 @@ class EmailTemplate:
 
         # Set the filled state to false
         self.filled = False
+
+    @property
+    def mailto_subject(self):
+        return quote(self.subject)
+
+    @property
+    def mailto_body(self):
+        return quote(self.body).replace("%0A", "%0D%0A")
 
     @staticmethod
     def _parse_newlines_to_db(string_to_database):
