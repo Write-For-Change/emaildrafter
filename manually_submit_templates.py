@@ -152,8 +152,8 @@ Yours sincerely,
 
 vanity_project_gra = {
     "name": "Vanity Project GRA Template",
-    "topics": ["gender-reform-act"],
-    "subject": "Gender Reform Act Withdrawal",
+    "topics": ["gender-recognition-act"],
+    "subject": "Gender Recognition Act Reform Withdrawal",
     "author_url": "https://www.facebook.com/story.php?story_fbid=2799692286983914&id=1701399066813247",
     "more_info_url": "https://www.stonewall.org.uk/truth-about-trans#trans-people-britain",
     "body": """
@@ -196,8 +196,8 @@ Yours sincerely,
 
 gra_mp_from_trans_person = {
     "name": "GRA Template From Trans Person",
-    "topics": ["gender-reform-act"],
-    "subject": "Gender Reform Act Withdrawal",
+    "topics": ["gender-recognition-act"],
+    "subject": "Gender Recognition Act Reform Withdrawal",
     "author_url": "https://docs.google.com/document/d/1j0FdGD2CY_nsxqbzLRBLLRTgtm8trlYZ7nUuVN9mBHE/edit",
     "more_info_url": "https://gra.good.do/trusstme/trusstme/",
     "body": """
@@ -224,8 +224,8 @@ Yours sincerely,
 
 gra_mp_from_cisgender_person = {
     "name": "GRA Template From Cisgender Person",
-    "topics": ["gender-reform-act"],
-    "subject": "Gender Reform Act Withdrawal",
+    "topics": ["gender-recognition-act"],
+    "subject": "Gender Recognition Act Reform Withdrawal",
     "author_url": "https://docs.google.com/document/d/1xjgLryhWABGtQK0kR8zYFymMxQOoueqc3sohPJPfis8/edit",
     "more_info_url": "https://gra.good.do/trusstme/trusstme/",
     "body": """
