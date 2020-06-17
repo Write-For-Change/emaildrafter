@@ -182,13 +182,14 @@ The transgender community is small and disempowered. Trans people face high rate
 
 I urge you to stand up for the rights of transgender people in parliment. They desperately need allies, now more than ever.
 
-Thankyou and I hope to hear from you.
+Thank you and I hope to hear from you soon.
 
 All the best,
 
 Yours sincerely,
 
 {u[name]}
+{u[address]}
 """,
     "public": False,
 }
