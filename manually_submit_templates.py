@@ -266,4 +266,5 @@ for t in [
     gra_mp_from_trans_person,
     gra_mp_from_cisgender_person,
 ]:
+    print("Adding/updating: {}".format(t["name"]))
     add_or_update_template(**t)
