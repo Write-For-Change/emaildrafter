@@ -17,7 +17,7 @@
 
 		<a class="btn btn-danger btn-email mb-1" onclick="copy_compose('gmail', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Gmail</a>
 		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Outlook</a>
-		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject]}}')"role="button">Open in Yahoo Mail</a>
+		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')"role="button">Open in Yahoo Mail</a>
 
 		<br>
 	{% endfor %}
