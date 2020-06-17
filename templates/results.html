@@ -10,7 +10,7 @@
   	{% for e in emails %}
   		<br>
   		<h5 style="color: white;">{{ e.name }} to {{  e.target["name"] }} </h5>
-  		<p><a href="{{e.author_url}}">Original template.</a> <a href="{{e.more_info_url}}">More information about this campaign.</a></p>
+  		<p>{% if e.author_url %}<a href="{{e.author_url}}">Original template.</a>{% endif %} {% if e.more_info_url %}<a href="{{e.more_info_url}}">More information about this campaign.</a>{% endif %}</p>
   		<textarea disabled id="email{{loop.index}}" name="Email for {{ e.target['email'] }}" rows="20" style="width: 100%">
   		{{ e.body }}
   		</textarea>
