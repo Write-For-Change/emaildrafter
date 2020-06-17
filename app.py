@@ -67,18 +67,7 @@ def landing():
         address = request.form.get("address")
         empty_templates = get_existing_templates()
         emails = draft_templates(empty_templates, name, postcode, address)
-        a = [
-            {
-                "email": (e.target["email"]),
-                "subject_coded": parse.quote(e.subject),
-                "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
-                "subject": (e.subject),
-                "body": (e.body),
-            }
-            for e in emails
-        ]
-        # return jsonify(a)
-        return render_template("emails.html", emails=a)
+        return render_template("all-topics.html", emails=emails)
 
 
 @app.route("/aboutus")
@@ -112,5 +101,5 @@ def landing_single_topic(topic):
             emails = draft_templates(matching_templates, name, postcode, address)
             topic_capitalised = topic.replace("-", " ").title()
             return render_template(
-                "emails-one-topic.html", emails=emails, topic=topic_capitalised
+                "single-topic.html", emails=emails, topic=topic_capitalised
             )
