@@ -33,5 +33,5 @@ def addressExtractor(url):
     return addressList
 
 
-def getAddresses(postcode):
+def get_addresses(postcode):
     return sorted(addressExtractor(createQueryURL(postcode)))

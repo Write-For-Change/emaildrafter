@@ -6,6 +6,7 @@ Written by David Swarbrick (davidswarbrick) 2020
 import logging
 import re
 from database import myDb
+from mpdetails import get_mp_details
 
 
 # Instantiate the db connection:
@@ -233,3 +234,37 @@ def add_or_update_template(**t):
         # Template doesn't exist so create this template
         mongo.insert_one("email_templates", template_dict)
         return True
+
+
+def draft_templates(templates, name, postcode, address):
+    """Draft a given set of templates."""
+    user = {"name": name, "address": address}
+    filled_email_templates = []
+    mp = None
+    for e in templates:
+        if e.target is None and mp is None:
+            # Only get MP info if target not set on one of the emails
+            mp_details = get_mp_details(postcode)
+
+        if e.target is None:
+            # If target is none, set target to MP
+            e.set_target(
+                name=mp_details["name"],
+                email=mp_details["email"],
+                constituency=mp_details["constituency"],
+            )
+        # Pass the dictionary containing user information to the template filler
+        try:
+            success = e.fill(user)  # Returns true if successfully filled
+
+            if success:
+                # Append successful templates to the list we return
+                filled_email_templates.append(e)
+        except AttributeError:
+            log.debug("Target set incorrectly, failed to fill template")
+            pass
+        except KeyError as err:
+            # Template not filled due to error in either template or user dict
+            log.debug(err)
+            pass
+    return filled_email_templates

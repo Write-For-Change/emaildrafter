@@ -12,11 +12,15 @@ from flask import (
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import DataRequired, Length
-from emails import draft_all_emails, validatePostcodeApi, draft_specific_templates
-from emailtemplates import get_templates_by_topic
+from mpdetails import validate_postcode_api
+from emailtemplates import (
+    get_templates_by_topic,
+    get_existing_templates,
+    draft_templates,
+)
 from urllib import parse
 from secrets import token_bytes
-from address import getAddresses
+from address import get_addresses
 
 import json
 import logging
@@ -61,7 +65,8 @@ def landing():
         name = request.form["name"]
         postcode = request.form["postcode"].replace(" ", "")
         address = request.form.get("address")
-        emails = draft_all_emails(name, postcode, address)
+        empty_templates = get_existing_templates()
+        emails = draft_templates(empty_templates, name, postcode, address)
         a = [
             {
                 "email": (e.target["email"]),
@@ -83,8 +88,10 @@ def aboutus():
 
 @app.route("/postcode/<postcode>")
 def postcode(postcode):
-    if validatePostcodeApi(postcode):
-        return json.dumps(getAddresses(postcode))
+    # ToDo : Re-use this postcode query for MP data gathering
+    post_code_data = validate_postcode_api(postcode)
+    if post_code_data["status"] == 200:
+        return json.dumps(get_addresses(postcode))
     else:
         return make_response({"error": "Invalid postcode"}, 400)
 
@@ -102,9 +109,7 @@ def landing_single_topic(topic):
             name = request.form["name"]
             postcode = request.form["postcode"].replace(" ", "")
             address = request.form.get("address")
-            emails = draft_specific_templates(
-                matching_templates, name, postcode, address
-            )
+            emails = draft_templates(matching_templates, name, postcode, address)
             a = [
                 {
                     "email": (e.target["email"]),
