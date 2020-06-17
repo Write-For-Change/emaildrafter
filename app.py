@@ -8,6 +8,7 @@ from flask import (
     make_response,
     request,
     redirect,
+    abort
 )
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
@@ -55,6 +56,9 @@ def force_https():
             r = redirect(url, code=code)
             return r
 
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('404.html', error=error), 404
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
@@ -89,7 +93,7 @@ def postcode(postcode):
 def landing_single_topic(topic):
     matching_templates = get_templates_by_topic(topic)
     if len(matching_templates) == 0:
-        return make_response({"error": "Topic Not Found"}, 404)
+        abort(404, "Topic not found")
     else:
         if request.method == "GET":
             # ToDo: Need to make a topic-specific landing page
