@@ -88,10 +88,12 @@ class EmailTemplate:
 
     @property
     def mailto_subject(self):
+        """Passes the subject through the urllib quote parser for usage in mailto links in HTML"""
         return quote(self.subject)
 
     @property
     def mailto_body(self):
+        """Passes the body through the urllib quote parser for usage in mailto links in HTML"""
         return quote(self.body).replace("%0A", "%0D%0A")
 
     @staticmethod
