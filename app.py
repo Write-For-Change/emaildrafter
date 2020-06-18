@@ -16,6 +16,7 @@ from wtforms.validators import DataRequired, Length
 from mpdetails import validate_postcode_api
 from emailtemplates import (
     get_templates_by_topic,
+    get_templates_by_name,
     get_existing_templates,
     draft_templates,
 )
@@ -146,3 +147,42 @@ def landing_single_topic(topic):
             return render_template(
                 "single-topic.html", emails=emails, topic=topic_capitalised
             )
+            a = [
+                {
+                    "email": (e.target["email"]),
+                    "subject_coded": parse.quote(e.subject),
+                    "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
+                    "subject": (e.subject),
+                    "body": (e.body),
+                }
+                for e in emails
+            ]
+            return render_template("emails.html", emails=a)
+
+
+@app.route("/template/<template_name>", methods=["GET", "POST"])
+def display_template(template_name):
+    matching_templates = get_templates_by_name(template_name)
+    if len(matching_templates) == 0:
+        return make_response({"error": "Template Not Found"}, 404)
+    else:
+        if request.method == "GET":
+            return render_template("landing.html")
+        else:
+            name = request.form["name"]
+            postcode = request.form["postcode"].replace(" ", "")
+            address = request.form.get("address")
+            email_template = draft_templates(
+                matching_templates, name, postcode, address
+            )
+            a = [
+                {
+                    "email": (e.target["email"]),
+                    "subject_coded": parse.quote(e.subject),
+                    "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
+                    "subject": (e.subject),
+                    "body": (e.body),
+                }
+                for e in email_template
+            ]
+            return render_template("single_email.html", email=a[0])
