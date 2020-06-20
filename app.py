@@ -8,7 +8,7 @@ from flask import (
     make_response,
     request,
     redirect,
-    abort
+    abort,
 )
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
@@ -16,7 +16,7 @@ from wtforms.validators import DataRequired, Length
 from mpdetails import validate_postcode_api
 from emailtemplates import (
     get_templates_by_topic,
-    get_templates_by_name,
+    get_templates_by_slug,
     get_existing_templates,
     draft_templates,
 )
@@ -60,9 +60,11 @@ def force_https():
             r = redirect(url, code=code)
             return r
 
+
 @app.errorhandler(404)
 def error_404(error):
-    return render_template('404.html', error=error), 404
+    return render_template("404.html", error=error), 404
+
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
@@ -76,42 +78,6 @@ def landing():
         empty_templates = get_existing_templates()
         emails = draft_templates(empty_templates, name, postcode, address)
         return render_template("all-topics.html", emails=emails)
-
-
-@app.route("/<template_id>", methods=["GET", "POST"])
-def display_template():
-    if request.method == "GET":
-        return render_template("landing.html")
-    else:
-        name = request.form["name"]
-        postcode = request.form["postcode"].replace(" ", "")
-        address = request.form.get("address")
-        email_template = {}
-
-        try:
-            email_template = mongo.get_one("email_templates", {"tag": template_id})
-        except:
-            # Maybe return an error page / return to homepage
-            raise KeyError
-        return render_template("single_email.html", email=email_template)
-
-
-@app.route("/<template_id>", methods=["GET", "POST"])
-def display_template():
-    if request.method == "GET":
-        return render_template("landing.html")
-    else:
-        name = request.form["name"]
-        postcode = request.form["postcode"].replace(" ", "")
-        address = request.form.get("address")
-        email_template = {}
-
-        try:
-            email_template = mongo.get_one("email_templates", {"tag": template_id})
-        except:
-            # Maybe return an error page / return to homepage
-            raise KeyError
-        return render_template("single_email.html", email=email_template)
 
 
 @app.route("/aboutus")
@@ -147,24 +113,13 @@ def landing_single_topic(topic):
             return render_template(
                 "single-topic.html", emails=emails, topic=topic_capitalised
             )
-            a = [
-                {
-                    "email": (e.target["email"]),
-                    "subject_coded": parse.quote(e.subject),
-                    "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
-                    "subject": (e.subject),
-                    "body": (e.body),
-                }
-                for e in emails
-            ]
-            return render_template("emails.html", emails=a)
 
 
-@app.route("/template/<template_name>", methods=["GET", "POST"])
-def display_template(template_name):
-    matching_templates = get_templates_by_name(template_name)
+@app.route("/template/<template_slug>", methods=["GET", "POST"])
+def display_template(template_slug):
+    matching_templates = get_templates_by_slug(template_slug)
     if len(matching_templates) == 0:
-        return make_response({"error": "Template Not Found"}, 404)
+        abort(404, "Topic not found")
     else:
         if request.method == "GET":
             return render_template("landing.html")
@@ -175,14 +130,4 @@ def display_template(template_name):
             email_template = draft_templates(
                 matching_templates, name, postcode, address
             )
-            a = [
-                {
-                    "email": (e.target["email"]),
-                    "subject_coded": parse.quote(e.subject),
-                    "body_coded": parse.quote(e.body).replace("%0A", "%0D%0A"),
-                    "subject": (e.subject),
-                    "body": (e.body),
-                }
-                for e in email_template
-            ]
-            return render_template("single_email.html", email=a[0])
+            return render_template("single_email.html", email=email_template[0])

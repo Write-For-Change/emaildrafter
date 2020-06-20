@@ -6,10 +6,10 @@
 <div>
 		<br>
 		<h5 style="color: white;">RE: {{ email['subject'] }} to {{ email['email'] }} </h5>
-		<textarea disabled id="email" name="Email for {{ email['email'] }}" rows="20" style="width: 100%">
+		<textarea disabled id="email" name="Email for {{ email.target['email'] }}" rows="20" style="width: 100%">
 		{{ email['body'] }}
 		</textarea>
-		<a class="btn btn-dark mb-1" href="mailto:{{email['email']}}?subject={{email['subject']}}&body={{email['body']}}" role="button">Open in default email app</a>
+		<a class="btn btn-dark mb-1" href="mailto:{{email.target['email']}}?subject={{email['subject']}}&body={{email['body']}}" role="button">Open in default email app</a>
 
 		<a class="btn btn-danger btn-email mb-1" onclick="copy_compose('gmail', '{{email['email']}}', '{{email['subject_coded']}}')" role="button">Open in Gmail</a>
 		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', '{{email['email']}}', '{{email['subject_coded']}}')" role="button">Open in Outlook</a>

@@ -218,16 +218,9 @@ def get_templates_by_topic(topic, only_public=False):
     return get_existing_templates({"topics": topic}, only_public)
 
 
-def get_templates_by_name(encoded_name, only_public=False):
-    """Get templates that match a specific name"""
-    unencoded_name = encoded_name.replace("-", " ")
-    print(
-        get_existing_templates(
-            {"name": {"$regex": "national curriculum change", "$options": "-i"}},
-            only_public,
-        )
-    )
-    return get_existing_templates({"name": unencoded_name}, only_public)
+def get_templates_by_slug(slug, only_public=False):
+    """Get templates that match a specific slug"""
+    return get_existing_templates({"slug": slug}, only_public)
 
 
 def pre_database_template_validation(**template_dict):
