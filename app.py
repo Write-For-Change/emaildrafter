@@ -78,6 +78,27 @@ def error_404(error):
     return render_template("404.html", error=error), 404
 
 
+class TemplateSubmissionForm(FlaskForm):
+    name = StringField("Your name", validators=[DataRequired(), Length(min=3)])
+    email = StringField(
+        "Your email address", validators=[DataRequired()], render_kw={"type": "email"}
+    )
+    target_name = StringField(
+        "Recipient name", validators=[DataRequired(), Length(min=3)]
+    )
+    target_email = StringField(
+        "Recipient email address",
+        validators=[DataRequired()],
+        render_kw={"type": "email"},
+    )
+    target_subject = StringField("Email subject", validators=[DataRequired()])
+    target_body = TextAreaField(
+        "Email template", validators=[DataRequired()], render_kw={"rows": "10"}
+    )
+    if enable_recaptcha:
+        recaptcha = RecaptchaField()
+
+
 @app.route("/", methods=["GET", "POST"])
 def landing():
 
