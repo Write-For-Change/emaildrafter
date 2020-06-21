@@ -24,6 +24,7 @@ from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
 from database import myDb
+from slugify import slugify
 
 import json
 import logging
@@ -117,7 +118,7 @@ def landing_single_topic(topic):
 
 @app.route("/template/<template_slug>", methods=["GET", "POST"])
 def display_template(template_slug):
-    matching_templates = get_templates_by_slug(template_slug)
+    matching_templates = get_templates_by_slug(slugify(template_slug))
     if len(matching_templates) == 0:
         abort(404, "Topic not found")
     else:
