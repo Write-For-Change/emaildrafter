@@ -251,7 +251,7 @@ def add_draft_template(**t):
     # Check if template using this name already exists, and update if so.
     template_dict = pre_database_template_validation(**t)
 
-    mongo.insert_one("email_templates", template_dict)
+    mongo.insert_one("template_submissions", template_dict)
     return True
 
 

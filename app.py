@@ -120,6 +120,7 @@ def submit_template():
         'subject' : target_subject,
         'body' : target_body
         }
+        
         add_draft_template(**d)
 
 
