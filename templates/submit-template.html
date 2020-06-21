@@ -1,9 +1,8 @@
 {% extends 'page.html' %}
 
 {% block content %}
-<div id="content">
-    <h2>Submit a new template.</h2>
-    <p>Please fill in the form below to submit a new template for our website.</p>
+    <h2 style="color: white; width: 100%">Submit a new template.</h2>
+    <p style="color: white; width: 100%"> Please fill in the form below to submit a new template for our website.</p>
     <form method="post">
         {{ form.csrf_token }}
         <div class="form-group" style="width: 100%">
@@ -30,6 +29,7 @@
             {% endfor %}
             {% endif %}
         </div>
+
         <div class="form-group" style="width: 100%">
             {{ form.target_email(class_="form-control", placeholder="Recipient email address") }}
             {% if form.target_email.errors %}
@@ -68,7 +68,6 @@
             <button id="submit-template" type="submit" class="btn btn-dark">Submit template</button>
         </div>
     </form>
-</div>
 
 
 

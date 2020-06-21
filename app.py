@@ -18,7 +18,9 @@ from emailtemplates import (
     get_templates_by_topic,
     get_existing_templates,
     draft_templates,
+    add_draft_template
 )
+from database import myDb
 from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
@@ -73,7 +75,7 @@ class TemplateSubmissionForm(FlaskForm):
     target_name = StringField('Recipient name', validators=[DataRequired(), Length(min=3)])
     target_email = StringField('Recipient email address', validators=[DataRequired()], render_kw={'type': 'email'})
     target_subject = StringField('Email subject', validators=[DataRequired()])
-    target_body = TextAreaField('Email template', validators=[DataRequired()])
+    target_body = TextAreaField('Email template', validators=[DataRequired()], render_kw={'rows':'10'})
     if enable_recaptcha:
         recaptcha = RecaptchaField()
 
@@ -110,6 +112,16 @@ def submit_template():
 
         # Do something with the inputs
         # createTemplate(...) --> emails.py:createTemplate(...)
+        d = {
+        'name' : name,
+        'email' : email,
+        'target_name' : target_name,
+        'target_email' : target_email,
+        'subject' : target_subject,
+        'body' : target_body
+        }
+        add_draft_template(**d)
+
 
         success = True
 
