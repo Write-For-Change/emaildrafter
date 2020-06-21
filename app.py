@@ -23,7 +23,6 @@ from emailtemplates import (
 from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
-from database import myDb
 from slugify import slugify
 
 import json
@@ -34,8 +33,6 @@ import sys
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.DEBUG)
-
-mongo = myDb()
 
 try:
     skey = bytes(os.environ["FLASK_SECRET_KEY"], "utf-8")
