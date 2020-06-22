@@ -38,21 +38,14 @@ You need **Python 3.6** or later.
 
 ## Email Template Structure
 
-Some work needs to be done to make the template structure easy to use and scalable to many emails (a more complete ToDo list is on the GitHub Projects page). For now, the available fields which templates are able to use are provided below, simple [python formatting](https://pyformat.info/#getitem_and_getattr) is used to populate the email body from dictionary values.
+Templates are now able to be submitted through the `/submit-template` endpoint.
+Fields which will be automatically substituted are defined in `emailtemplates.py` as:
 
-User information (provided in the form on the landing page):
-
-User Info | String for Template
+Placeholder | Filled with
 ---| ---
-Name | `{u[name]}`
-Postcode | `{u[postcode]}`
+%YOURNAME| Name of the user of the site
+%YOURADDRESS| Address of the user
+%TONAME| Name of the recipient of the email
+%CONSTITUENCY| Constituency of the MP (if applicable)
 
-
-Information about the recipient of the email, either set by the template, or information about an MP retrieved automatically (the ward is set to `None` if the recipient is not an MP):
-
-
-Target Info | String for Template
---- | ---
-Name | `{t[name]}`
-Email | `{t[email]}`
-Constituency | `{t[constituency]}`
+Submitted templates are validated (automatically) and moderated (by a human) before inclusion on the site.
