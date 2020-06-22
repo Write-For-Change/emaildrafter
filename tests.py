@@ -127,7 +127,11 @@ class TestUserBodySubmissionTemplate(unittest.TestCase):
         self.assertFalse(
             UserBodySubmissionTemplate.check_submission_fields("%UNKNOWN %TONAMES")
         )
-        self.assertFalse(UserBodySubmissionTemplate.check_submission_fields("%tonames"))
+        # All caps will fail, as this field is illegal
+        self.assertFalse(UserBodySubmissionTemplate.check_submission_fields("%UNKNOWN"))
+        # A field name that is not all in caps will return 0 possible fields from the regex check, thus would never be filled, and will result in zero errors from checking.
+        # This behaviour is setup in case people mistype 80%of... etc, as we assume they only wish capitalised fields to be altered.
+        self.assertTrue(UserBodySubmissionTemplate.check_submission_fields("%Unknown"))
         self.assertTrue(UserBodySubmissionTemplate.check_submission_fields("%TONAME"))
 
     def test_substitution(self):
