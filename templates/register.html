@@ -1,0 +1,28 @@
+{% extends 'page.html' %}
+
+{% block content %}
+
+<div>
+	<h3 style="color: white">Register</h3>
+	<form method="post">
+		<div class="form-group">
+			<label for="email" style="color: white; ">Email</label>
+			<input type="text" name="email" class="form-control" id="email">
+		</div>
+		<div class="form-group">
+			<label for="name" style="color: white">Name (full please)</label>
+			<input type="text" name="name" class="form-control" id="name">
+		</div>
+		<div class="form-group">
+			<label for="password" style="color: white">Password</label>
+			<input type="password" name="password" class="form-control" id="password">
+		</div>
+		<div class="form-group">
+			<label for="confirm" style="color: white">Repeat Password</label>
+			<input type="password" name="confirm" class="form-control" id="password">
+		</div>
+		<button type="submit" class="btn btn-primary">Register</button>
+	</form>
+</div>
+
+{% endblock %}

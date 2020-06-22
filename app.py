@@ -12,6 +12,7 @@ from flask import (
 )
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextAreaField, SubmitField
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from wtforms.validators import DataRequired, Length, Email
 from mpdetails import validate_postcode_api
 from emailtemplates import (
@@ -20,11 +21,12 @@ from emailtemplates import (
     draft_templates,
     add_draft_template
 )
+from users import User, add_user, find_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from database import myDb
 from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
-
 import emailtemplates
 import json
 import logging
@@ -49,6 +51,9 @@ except KeyError:
 
 app.secret_key = skey
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view='login'
 
 @app.before_request
 def force_https():
@@ -166,3 +171,49 @@ def landing_single_topic(topic):
             return render_template(
                 "single-topic.html", emails=emails, topic=topic_capitalised
             )
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == "POST":
+        name=request.form.get("name")
+        email=request.form.get("email")
+        password=request.form.get("password")
+
+        if len(password) <= 6:
+            flash('Password needs to be greater than 6 characters please.', 'danger')
+            return render_template('register.html')
+
+        confirm=request.form.get("confirm")
+        if password != confirm:
+            flash('Please double check your passwords match', 'danger')
+            return render_template('register.html')
+        hashed_password = generate_password_hash(password)
+        add_user(**{"name": name, "email": email, "hashed_password": hashed_password})
+
+        flash('Successfully registered account.', 'success')
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        # Find account and store it in the
+        print(repr(email))
+        account = find_user(email)
+        if account is not None:
+            print("Account found, check pswd")
+            if check_password_hash(account['hashed_password'], password):
+                user = User(account['_id'], account['name'], account['email'] , account['hashed_password'], account['state'])
+                print('logging in:',user)
+                login_user(user)
+                print(user)
+                flash('Successful Login', 'success')
+            else:
+                flash('Incorrect username or password', 'danger')
+        else:
+            print("account not found")
+            flash('Incorrect username or password', 'danger')
+    return render_template('login.html')
