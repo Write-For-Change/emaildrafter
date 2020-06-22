@@ -8,7 +8,7 @@ from flask import (
     make_response,
     request,
     redirect,
-    abort
+    abort,
 )
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
@@ -16,12 +16,14 @@ from wtforms.validators import DataRequired, Length
 from mpdetails import validate_postcode_api
 from emailtemplates import (
     get_templates_by_topic,
+    get_templates_by_slug,
     get_existing_templates,
     draft_templates,
 )
 from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
+from slugify import slugify
 
 import json
 import logging
@@ -56,9 +58,11 @@ def force_https():
             r = redirect(url, code=code)
             return r
 
+
 @app.errorhandler(404)
 def error_404(error):
-    return render_template('404.html', error=error), 404
+    return render_template("404.html", error=error), 404
+
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
@@ -107,3 +111,21 @@ def landing_single_topic(topic):
             return render_template(
                 "single-topic.html", emails=emails, topic=topic_capitalised
             )
+
+
+@app.route("/template/<template_slug>", methods=["GET", "POST"])
+def display_template(template_slug):
+    matching_templates = get_templates_by_slug(slugify(template_slug))
+    if len(matching_templates) == 0:
+        abort(404, "Topic not found")
+    else:
+        if request.method == "GET":
+            return render_template("landing.html")
+        else:
+            name = request.form["name"]
+            postcode = request.form["postcode"].replace(" ", "")
+            address = request.form.get("address")
+            email_template = draft_templates(
+                matching_templates, name, postcode, address
+            )
+            return render_template("single_email.html", email=email_template[0])

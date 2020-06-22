@@ -1,4 +1,5 @@
 from emailtemplates import add_or_update_template
+from slugify import slugify
 
 mp_police = {
     "subject": "Suspension of Exportation of Policing Equipment to the US",
@@ -26,6 +27,7 @@ Regards,
 {u[name]}
     """,
     "name": "Suspend Police Equipment Exports",
+    "slug": slugify("Suspend Police Equipment Exports"),
     "topics": ["black-lives-matter"],
     "public": True,
 }
@@ -36,6 +38,7 @@ Regards,
 
 gavinwilliamson_email = {
     "name": "National Curriculum Change",
+    "slug": slugify("National Curriculum Change"),
     "topics": ["black-lives-matter"],
     "subject": "Make Black histories mandatory in the national curriculum",
     "body": """
@@ -60,6 +63,7 @@ gavinwilliamson_email["target"] = {
 
 belly_mujinga_mp = {
     "name": "Belly Mujinga - MP",
+    "slug": slugify("Belly Mujinga - MP"),
     "subject": "Justice for Belly Mujinga",
     "author_url": "https://docs.google.com/document/d/1P7owSv_blKdVaAzII-ySKpk1Vo7w2c_mpE4wUSmRPBQ/edit#heading=h.xvqvign7bp33",
     "body": """
@@ -88,6 +92,7 @@ Yours sincerely,
 
 belly_mujinga_govia = {
     "name": "Belly Mujinga - Govia",
+    "slug": slugify("Belly Mujinga - Govia"),
     "topics": ["black-lives-matter"],
     "subject": "Justice for Belly Mujinga",
     "body": """
@@ -122,6 +127,7 @@ belly_mujinga_govia["target"] = {
 
 shukri_abdi = {
     "name": "Justice for Shukri Abdi",
+    "slug": slugify("Justice for Shukri Abdi"),
     "topics": ["black-lives-matter"],
     "subject": "Justice For Shukri Abdi",
     "body": """
@@ -152,8 +158,9 @@ Yours sincerely,
 
 vanity_project_gra = {
     "name": "Vanity Project GRA Template",
-    "topics": ["gender-reform-act"],
-    "subject": "Gender Reform Act Withdrawal",
+    "slug": slugify("Vanity Project GRA Template"),
+    "topics": ["gender-recognition-act"],
+    "subject": "Gender Recognition Act Reform Withdrawal",
     "author_url": "https://www.facebook.com/story.php?story_fbid=2799692286983914&id=1701399066813247",
     "more_info_url": "https://www.stonewall.org.uk/truth-about-trans#trans-people-britain",
     "body": """
@@ -196,8 +203,9 @@ Yours sincerely,
 
 gra_mp_from_trans_person = {
     "name": "GRA Template From Trans Person",
-    "topics": ["gender-reform-act"],
-    "subject": "Gender Reform Act Withdrawal",
+    "slug": slugify("GRA Template From Trans Person"),
+    "topics": ["gender-recognition-act"],
+    "subject": "Gender Recognition Act Reform Withdrawal",
     "author_url": "https://docs.google.com/document/d/1j0FdGD2CY_nsxqbzLRBLLRTgtm8trlYZ7nUuVN9mBHE/edit",
     "more_info_url": "https://gra.good.do/trusstme/trusstme/",
     "body": """
@@ -224,8 +232,9 @@ Yours sincerely,
 
 gra_mp_from_cisgender_person = {
     "name": "GRA Template From Cisgender Person",
-    "topics": ["gender-reform-act"],
-    "subject": "Gender Reform Act Withdrawal",
+    "slug": slugify("GRA Template From Cisgender Person"),
+    "topics": ["gender-recognition-act"],
+    "subject": "Gender Recognition Act Reform Withdrawal",
     "author_url": "https://docs.google.com/document/d/1xjgLryhWABGtQK0kR8zYFymMxQOoueqc3sohPJPfis8/edit",
     "more_info_url": "https://gra.good.do/trusstme/trusstme/",
     "body": """
