@@ -252,6 +252,14 @@ def add_or_update_template(**t):
         return True
 
 
+def add_draft_template(**t):
+    # Check if template using this name already exists, and update if so.
+    template_dict = pre_database_template_validation(**t)
+
+    mongo.insert_one("template_submissions", template_dict)
+    return True
+
+
 def draft_templates(templates, name, postcode, address):
     """Draft a given set of templates."""
     user = {"name": name, "address": address}
