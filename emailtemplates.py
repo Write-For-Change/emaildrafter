@@ -5,6 +5,7 @@ Written by David Swarbrick (davidswarbrick) 2020
 """
 import logging
 import re
+from string import Template
 from urllib.parse import quote
 from database import myDb
 from mpdetails import get_mp_details
@@ -18,6 +19,49 @@ log = logging.getLogger("app")
 
 ALLOWED_USER_FIELDS = ["name", "address"]
 ALLOWED_TARGET_FIELDS = ["name", "constituency", "email"]
+TEMPLATE_SUBMISSION_FIELDS = {
+    # %FIELD for input form to be replaced with dictionary lookup
+    # u = user dictionary, t = target dictionary
+    "YOURNAME": "{u[name]}",
+    "YOURADDRESS": "{u[address]}",
+    "CONSTITUENCY": "{t[constituency]}",
+    "TONAME": "{t[name]}",
+}
+
+
+class UserBodySubmissionTemplate(Template):
+    """Convert %TEMPLATEFIELD into u{field} or t{field} as appropriate, through inheriting the standard Python Template class"""
+
+    delimiter = "%"
+    # Turn off ignore case flag
+    flags = 0
+    # Detect capitals only, ending in non-word, whitespace, or end of string
+    idpattern = r"([A-Z]+)(?=\W|\s|$)"
+
+    def convert_body(self):
+        """Return a 'safe' substitution of all template fields to their dictionary-fillable counterparts using the TEMPLATE_SUBMISSION_FIELDS dict.
+        The 'safe' prefix means that invalid placeholders (following a % sign) will not raise errors, just pass through unchanged."""
+        return self.safe_substitute(**TEMPLATE_SUBMISSION_FIELDS)
+
+    @staticmethod
+    def check_submission_fields(body):
+        """Returns True if all %TEXT fields are in TEMPLATE_SUBMISSION_FIELDS (i.e. they are allowed), returns False if not """
+        f = re.compile(
+            # Add the % lookup at the start, but otherwise use the same settings as the Template substitute regex.
+            r"(?<=%)" + UserBodySubmissionTemplate.idpattern,
+            flags=UserBodySubmissionTemplate.flags,
+        )
+        fields_used = set(f.findall(body))
+        if fields_used <= set(TEMPLATE_SUBMISSION_FIELDS.keys()):
+            # All fields exist in Template Submission Fields dict
+            # Empty sets are included, as templates not using any submission fields are allowed
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def get_allowed_fields():
+        return "".join("%{} ".format(k) for k in TEMPLATE_SUBMISSION_FIELDS.keys())
 
 
 class EmailTemplate:
@@ -188,6 +232,13 @@ class EmailTemplate:
         return self.filled
 
 
+class TemplateSubmitter:
+    def __init__(self, name, email, template_id):
+        self.name = name
+        self.email = email
+        self.template_id = template_id
+
+
 def get_existing_templates(query=None, only_public=True):
     """Grab all the template options that exist so far"""
 
@@ -211,13 +262,6 @@ def get_existing_templates(query=None, only_public=True):
             templates.append(et)
 
     return templates
-
-
-class TemplateSubmitter:
-    def __init__(self, name, email, template_id):
-        self.name = name
-        self.email = email
-        self.template_id = template_id
 
 
 def get_templates_by_topic(topic, only_public=False):

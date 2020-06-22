@@ -1,6 +1,7 @@
 import unittest
+from string import Template
 from copy import deepcopy
-from emailtemplates import EmailTemplate
+from emailtemplates import EmailTemplate, UserBodySubmissionTemplate
 
 # Reference dictionaries for user and target info
 user_info = {
@@ -17,7 +18,7 @@ target_info = {
 example_template = {
     # Subject field: To be entered in the subject field of mailto and gmail links
     "subject": "Justice for an Email Template Example",
-    # Body field: Content of the template including dictionary lookups for auto-filling later
+    # UserBodySubmissionTemplate field: Content of the template including dictionary lookups for auto-filling later
     "body": "dear {t[name]},\nLots of complex ideas and thoughts\n expressed well (handle newlines) from: {u[name]} {u[address]}",
     # Name of the template: ideally 3-4 words max to allow a quick description of this template, may be the same as the subject line of the email for some templates.
     # This will be used to check if template already exists so AVOID RENAMING TEMPLATES
@@ -100,6 +101,39 @@ class TestEmailTemplate(unittest.TestCase):
         dict["body"] = "Dear {t[names]}, {u[name]}"
         with self.assertRaises(KeyError):
             et = EmailTemplate(**dict)
+
+
+class TestUserBodySubmissionTemplate(unittest.TestCase):
+    def test_original_substitution(self):
+        """Testing Template is imported correctly and runs on a basic case"""
+        t = Template("$toname")
+        self.assertEqual(t.safe_substitute({"toname": "{t[name]}"}), "{t[name]}")
+
+    def test_unsafe_substitute(self):
+        """Testing substitute works with $ changed to % and with different regex"""
+        # Check a space or end of string allows correct substitution
+        t = UserBodySubmissionTemplate("%TONAME test %TONAME")
+        self.assertEqual(
+            t.substitute({"TONAME": "{t[name]}"}), "{t[name]} test {t[name]}"
+        )
+
+        t = UserBodySubmissionTemplate("%TONAME TONAME %toName %Toname %toname ")
+        with self.assertRaises(ValueError):
+            # incorrectly capitalised %fIeLd will raise an error as they do not match the regex
+            t.substitute({"TONAME": "{t[name]}"})
+
+    def test_illegal_fields(self):
+        """Testing illegal fields are identified by class method"""
+        self.assertFalse(
+            UserBodySubmissionTemplate.check_submission_fields("%UNKNOWN %TONAMES")
+        )
+        self.assertFalse(UserBodySubmissionTemplate.check_submission_fields("%tonames"))
+        self.assertTrue(UserBodySubmissionTemplate.check_submission_fields("%TONAME"))
+
+    def test_substitution(self):
+        """Testing substitution works from TEMPLATE_SUBMISSION_FIELDS dict"""
+        t = UserBodySubmissionTemplate("%TONAME TONAME %toName %Toname %toname ")
+        self.assertEqual(t.convert_body(), "{t[name]} TONAME %toName %Toname %toname ")
 
 
 if __name__ == "__main__":
