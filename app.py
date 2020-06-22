@@ -14,6 +14,7 @@ from forms import TemplateSubmissionForm
 from mpdetails import validate_postcode_api
 from emailtemplates import (
     get_templates_by_topic,
+    get_templates_by_slug,
     get_existing_templates,
     draft_templates,
     add_draft_template,
@@ -25,6 +26,7 @@ from database import myDb
 from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
+from slugify import slugify
 
 import json
 import logging
@@ -175,3 +177,21 @@ def landing_single_topic(topic):
             return render_template(
                 "single-topic.html", emails=emails, topic=topic_capitalised
             )
+
+
+@app.route("/template/<template_slug>", methods=["GET", "POST"])
+def display_template(template_slug):
+    matching_templates = get_templates_by_slug(slugify(template_slug))
+    if len(matching_templates) == 0:
+        abort(404, "Topic not found")
+    else:
+        if request.method == "GET":
+            return render_template("landing.html")
+        else:
+            name = request.form["name"]
+            postcode = request.form["postcode"].replace(" ", "")
+            address = request.form.get("address")
+            email_template = draft_templates(
+                matching_templates, name, postcode, address
+            )
+            return render_template("single_email.html", email=email_template[0])
