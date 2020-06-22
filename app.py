@@ -77,6 +77,7 @@ def force_https():
 def error_404(error):
     return render_template("404.html", error=error), 404
 
+<<<<<<< HEAD
 
 class TemplateSubmissionForm(FlaskForm):
     name = StringField("Your name", validators=[DataRequired(), Length(min=3)])
@@ -98,6 +99,8 @@ class TemplateSubmissionForm(FlaskForm):
     if enable_recaptcha:
         recaptcha = RecaptchaField()
 
+=======
+>>>>>>> 0a6e792... Merge single template changes (#45)
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
