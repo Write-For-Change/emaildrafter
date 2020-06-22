@@ -120,9 +120,11 @@ def submit_template():
         'subject' : target_subject,
         'body' : target_body
         }
-        
-        add_draft_template(**d)
 
+        try:
+            add_draft_template(**d)
+        except Exception:
+            flash('Error when submitting template.', 'danger')
 
         success = True
 
