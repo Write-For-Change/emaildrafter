@@ -213,6 +213,13 @@ def get_existing_templates(query=None, only_public=True):
     return templates
 
 
+class TemplateSubmitter:
+    def __init__(self, name, email, template_id):
+        self.name = name
+        self.email = email
+        self.template_id = template_id
+
+
 def get_templates_by_topic(topic, only_public=False):
     """Get templates that match a specific topic"""
     return get_existing_templates({"topics": topic}, only_public)
