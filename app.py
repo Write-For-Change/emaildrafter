@@ -45,6 +45,13 @@ except KeyError:
 app.secret_key = skey
 
 
+""" For developers running on a newer version of openssl:
+    A recent update to openssl was pushed to fix something
+    called a logjam attack. The ciphers that are being used
+    in some of the libs mustn't be up to date yet which
+    may cause errors when running the server in a dev env.
+    This try/catch bypasses the requirement of a longer key.
+"""
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += "HIGH:!DH:!aNULL"
 try:
     requests.packages.urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST += (
@@ -53,6 +60,7 @@ try:
 except AttributeError:
     # no pyopenssl support used / needed / available
     pass
+
 
 url = "https://us10.api.mailchimp.com/3.0/lists/{}/members/".format(
     os.environ["MCLIST_ID"]
