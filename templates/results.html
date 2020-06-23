@@ -29,7 +29,7 @@
 	<div class="modal-dialog" role="document">
 	  <div class="modal-content">
 		<div class="modal-header">
-		  <h5 class="modal-title" id="exampleModalLabel">Newsletter</h5>
+		  <h5 class="modal-title" id="newsletterModalLabel">Newsletter</h5>
 		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		  </button>
@@ -101,7 +101,7 @@
 		  div.appendChild(content)
 		  $('#resultModal').modal('show');
 	  }
-	  else
+	  else if (data.status == 'failed')
 	  {
 		var div = document.getElementById("result");
 		var content = document.createTextNode("There was an issue with adding you to the newsletter, please try again later.");
@@ -118,7 +118,7 @@
   var button = document.getElementById('default-mail-button');
   button.addEventListener('click', function()
   {
-	$('#exampleModal').modal('show');
+	$('#newsletterModal').modal('show');
   });
 
   function copy_compose(client, index, to, subject) {
