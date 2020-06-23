@@ -150,7 +150,6 @@ def display_template(template_slug):
 @app.route("/newsletter", methods=["POST"])
 def subscribe_to_newsletter():
 
-    print(request.form["email"])
     post_params = {"email_address": request.form["email"], "status": "subscribed"}
     r = requests.post(
         url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]), json=post_params
@@ -161,5 +160,4 @@ def subscribe_to_newsletter():
         return jsonify(status="failed")
 
     results = r.json()
-    print(results)
     return jsonify(status="success")
