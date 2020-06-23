@@ -17,6 +17,9 @@ from emailtemplates import (
     get_existing_templates,
     draft_templates,
     add_draft_template,
+    EmailTemplate,
+    TemplateSubmitter,
+    UserBodySubmissionTemplate,
 )
 from database import myDb
 from urllib import parse
@@ -93,39 +96,48 @@ def aboutus():
 
 @app.route("/submit-template", methods=["GET", "POST"])
 def submit_template():
-    form = TemplateSubmissionForm()
+    new_template = EmailTemplate(**{"subject": "", "body": "", "name": ""})
+    form = TemplateSubmissionForm(request.POST, obj=new_template)
 
     if request.method == "POST" and form.validate_on_submit():
-        # ToDo : Handle form submission, get data from form and construct EmailTemplate & TemplateSubmitter objects (for db storage), and target dict (if required)
-        # Use UserBodySubmissionTemplate to convert from %FIELD into u{field} etc.
-
-        # name = form.name.data
-        # email = form.email.data
-        # target_name = form.target_name.data
-        # target_email = form.target_email.data
-        # subject = form.subject.data
-        # body = form.body.data
-        #
-        # # Do something with the inputs
-        # # createTemplate(...) --> emails.py:createTemplate(...)
-        # d = {
-        #     "name": name,
-        #     "email": email,
-        #     "target_name": target_name,
-        #     "target_email": target_email,
-        #     "subject": target_subject,
-        #     "body": target_body,
-        # }
+        # Get submitted body
+        user_body = UserBodySubmissionTemplate(form.body.data)
+        # Overwrite with converted body - ToDo: Check this is a legal operation
+        form.body.data = user_body.convert_body()
+        # Populate new_template object
+        # ToDo: Check/handle behaviour of populate_obj on empty fields such as target, make sure pre-database storage validation can still take place
+        form.populate_obj(new_template)
 
         try:
-            add_draft_template(**d)
+            # Validate and store draft template
+            template_id = add_draft_template(new_template)
         except Exception:
-            flash("Error when submitting template.", "danger")
+            # ToDo: Handle template which have passed form validation but cannot be added
+            # flash("Error when submitting template.", "danger")
+            template_id = None
+            success = False
+            pass
 
-        success = True
+        if template_id:
+            submitter = TemplateSubmitter(
+                name=form.submitter_name.data,
+                email=form.submitter_email.data,
+                template_id=template_id,
+            )
+            try:
+                # success = add_submitter_info(submitter) # ToDo: Add submitter function
+                success = True
 
+            except Exception:
+                success = False
+                # ToDo: Handle incorrect storage of Submitter info
+                pass
         if success:
             return redirect("/success")
+        else:
+            # ToDo: Handle failed template submission - error page?
+            return
+
     else:
         return render_template("submit-template.html", form=form)
 

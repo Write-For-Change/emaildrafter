@@ -17,8 +17,8 @@ mongo = myDb()
 # Instantiate logging:
 log = logging.getLogger("app")
 
-ALLOWED_USER_FIELDS = ["name", "address"]
-ALLOWED_TARGET_FIELDS = ["name", "constituency", "email"]
+ALLOWED_USER_FIELDS = set(["name", "address"])
+ALLOWED_TARGET_FIELDS = set(["name", "constituency", "email"])
 TEMPLATE_SUBMISSION_FIELDS = {
     # %FIELD for input form to be replaced with dictionary lookup
     # u = user dictionary, t = target dictionary
@@ -172,32 +172,30 @@ class EmailTemplate:
 
         # Generate the fields the template requires to check the supplied fields are correct
         template_fields_used = EmailTemplate._generate_used_fields(template_body)
+        target_set = set(fields_used["target"])
+        user_set = set(fields_used["user"])
 
         # Check the fields used in the template matches those we expect to be used:
-        if set(fields_used["target"]) != set(template_fields_used["target"]):
+        if target_set != set(template_fields_used["target"]):
             raise KeyError(
                 "Supplied Target keys do not match Target fields in template"
             )
-        if set(fields_used["user"]) != set(template_fields_used["user"]):
+        if user_set != set(template_fields_used["user"]):
             raise KeyError("Supplied User keys do not match User fields in template")
 
-        # Check the keys against the legal keys (set above)
-        for key in fields_used["target"]:
-            if key not in ALLOWED_TARGET_FIELDS:
-                raise KeyError("Illegal Target Key Identified: {}".format(key))
-        for key in fields_used["user"]:
-            if key not in ALLOWED_USER_FIELDS:
-                raise KeyError("Illegal User Key Identified: {}".format(key))
+        # Check the used keys are subsets of the allowed keys
+        if not (target_set <= ALLOWED_TARGET_FIELDS):
+            raise KeyError("Illegal Target Key Present")
+        if not (user_set <= ALLOWED_USER_FIELDS):
+            raise KeyError("Illegal User Key Present")
 
     def _validate_target(self):
         if self.target is None:
             raise AttributeError("Target not set for this template.")
         else:
-            for key in self.fields_used["target"]:
-                if key in self.target:
-                    pass
-                else:
-                    raise KeyError("Template requires key not present in target info.")
+            if not (set(self.fields_used["target"]) <= set(self.target.keys())):
+                # If the used target keys are not a subset of the stored target keys
+                raise KeyError("Template requires key not present in target info.")
 
     def _validate_user_info(self, user_info):
         for key in self.fields_used["user"]:
@@ -298,12 +296,12 @@ def add_or_update_template(**t):
         return True
 
 
-def add_draft_template(**t):
-    # Check if template using this name already exists, and update if so.
-    template_dict = pre_database_template_validation(**t)
-
-    mongo.insert_one("template_submissions", template_dict)
-    return True
+def add_draft_template(email_template):
+    """Given a constructed EmailTemplate: re-run validation functions, and handle templates with the same name in the db before submission"""
+    # ToDo: Fill out function to complete tasks above
+    # Store dictionary representation of object
+    result = mongo.insert_one("template_submissions", vars(email_template))
+    return result.inserted_id
 
 
 def draft_templates(templates, name, postcode, address):
