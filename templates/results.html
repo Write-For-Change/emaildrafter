@@ -15,16 +15,111 @@
   		{{ e.body }}
   		</textarea>
   		<!-- <button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button> -->
-  		<a class="btn btn-dark mb-1" href="mailto:{{e.target['email']}}?subject={{e.mailto_subject}}&body={{e.mailto_body}}" role="button">Open in default email app</a>
+  		<a class="btn btn-dark mb-1" id="default-mail-button" href="mailto:{{e.target['email']}}?subject={{e.mailto_subject}}&body={{e.mailto_body}}" role="button">Open in default email app</a>
 
-  		<a class="btn btn-danger btn-email mb-1" onclick="copy_compose('gmail', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Gmail</a>
-  		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Outlook</a>
-  		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')"role="button">Open in Yahoo Mail</a>
+  		<a class="btn btn-danger btn-email mb-1" data-toggle="modal" data-target="#exampleModal" onclick="copy_compose('gmail', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Gmail</a>
+  		<a class="btn btn-primary btn-email mb-1" data-toggle="modal" data-target="#exampleModal" onclick="copy_compose('outlook', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Outlook</a>
+  		<a class="btn btn-info btn-email mb-1" data-toggle="modal" data-target="#exampleModal" onclick="copy_compose('yahoo', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')"role="button">Open in Yahoo Mail</a>
 
   		<br>
   	{% endfor %}
   </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Newsletter</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div>
+				Consider subscribing to our newsletter to receive updates about upcoming features such as Template Maker!
+			</div>
+		  <form role="form" id="newsletter-form">
+			  <div class="form-group">
+				  <label class="control-label">E-Mail Address</label>
+				  <div>
+					<input type="email" class="form-control" name="email" placeholder="example@domain.com">
+				  </div>
+			  </div>
+
+			  <div class="btn_toolbar">
+				<input class="btn btn-success mb-1" type="submit" value="Subscribe">
+				<button class="btn btn-danger mb-1" data-dismiss="modal">Dismiss</button>
+			</div>
+		  </form>
+
+
+		</div>
+	  </div>
+	</div>
+  </div>
+
+
+  <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Newsletter</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div id="result">
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
   <script type="text/javascript">
+
+  function subSubmit(ev)
+  {
+	  ev.preventDefault();
+	  var request = new XMLHttpRequest();
+	  request.addEventListener('load', subShow);
+	  request.open('POST', {{ url_for('subscribe_to_newsletter')|tojson }});
+	  request.send(new FormData(this));
+	  $('#exampleModal').modal('hide');
+  }
+
+  function subShow()
+  {
+	  var data = JSON.parse(this.responseText);
+	  if (data.status == 'success')
+	  {
+		  var div = document.getElementById("result");
+		  var content = document.createTextNode("You have succesfully subscribed to our newsletter, Thank you!");
+		  div.appendChild(content)
+		  $('#resultModal').modal('show');
+	  }
+	  else
+	  {
+		var div = document.getElementById("result");
+		var content = document.createTextNode("There was an issue with adding you to the newsletter, please try again later.");
+		div.appendChild(content)
+		$('#resultModal').modal('show');
+	  }
+  }
+
+
+
+  var form = document.getElementById('newsletter-form');
+  form.addEventListener('submit', subSubmit);
+
+  var button = document.getElementById('default-mail-button');
+  button.addEventListener('click', function()
+  {
+	$('#exampleModal').modal('show');
+  });
 
   function copy_compose(client, index, to, subject) {
 

@@ -24,11 +24,13 @@ from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
 from slugify import slugify
+from requests.exceptions import HTTPError
 
 import json
 import logging
 import os
 import sys
+import requests
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -41,6 +43,20 @@ except KeyError:
     skey = token_bytes(16)
 
 app.secret_key = skey
+
+
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += "HIGH:!DH:!aNULL"
+try:
+    requests.packages.urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST += (
+        "HIGH:!DH:!aNULL"
+    )
+except AttributeError:
+    # no pyopenssl support used / needed / available
+    pass
+
+url = "https://us10.api.mailchimp.com/3.0/lists/{}/members/".format(
+    os.environ["MCLIST_ID"]
+)
 
 
 @app.before_request
@@ -129,3 +145,21 @@ def display_template(template_slug):
                 matching_templates, name, postcode, address
             )
             return render_template("single_email.html", email=email_template[0])
+
+
+@app.route("/newsletter", methods=["POST"])
+def subscribe_to_newsletter():
+
+    print(request.form["email"])
+    post_params = {"email_address": request.form["email"], "status": "subscribed"}
+    r = requests.post(
+        url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]), json=post_params
+    )
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    results = r.json()
+    print(results)
+    return jsonify(status="success")
