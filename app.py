@@ -97,7 +97,7 @@ def aboutus():
 @app.route("/submit-template", methods=["GET", "POST"])
 def submit_template():
     new_template = EmailTemplate(**{"subject": "", "body": "", "name": ""})
-    form = TemplateSubmissionForm(request.POST, obj=new_template)
+    form = TemplateSubmissionForm()  # request.POST, obj=new_template
 
     if request.method == "POST" and form.validate_on_submit():
         # Get submitted body
