@@ -70,6 +70,12 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {"environment": "emaildrafter.jinja2.environment"},
+    },
 ]
 
 WSGI_APPLICATION = "writeforchange.wsgi.application"
@@ -117,3 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
+# Common static files to all apps
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]

@@ -18,10 +18,10 @@ class EmailTemplate(models.Model):
 
     # Target field only set if NOT target_is_local_mp, stores a related target object
     target = models.OneToOneField(
-        "SpecificTarget", on_delete=models.CASCADE, default=None
+        "SpecificTarget", on_delete=models.CASCADE, default=None, blank=True
     )
     # Multiple topics can be associated with a template
-    topics = models.ManyToManyField("Topic")
+    topics = models.ManyToManyField("Topic", blank=True)
 
 
 class EmailTarget(models.Model):
