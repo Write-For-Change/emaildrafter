@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class EmaildrafterConfig(AppConfig):
+class EmailDrafterConfig(AppConfig):
     name = "emaildrafter"
