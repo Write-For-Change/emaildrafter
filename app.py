@@ -24,11 +24,14 @@ from urllib import parse
 from secrets import token_bytes
 from address import get_addresses
 from slugify import slugify
+from requests.exceptions import HTTPError
 
 import json
 import logging
 import os
 import sys
+import requests
+import hashlib
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -41,6 +44,28 @@ except KeyError:
     skey = token_bytes(16)
 
 app.secret_key = skey
+
+
+""" For developers running on a newer version of openssl:
+    A recent update to openssl was pushed to fix something
+    called a logjam attack. The ciphers that are being used
+    in some of the libs mustn't be up to date yet which
+    may cause errors when running the server in a dev env.
+    This try/catch bypasses the requirement of a longer key.
+"""
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += "HIGH:!DH:!aNULL"
+try:
+    requests.packages.urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST += (
+        "HIGH:!DH:!aNULL"
+    )
+except AttributeError:
+    # no pyopenssl support used / needed / available
+    pass
+
+
+url = "https://us10.api.mailchimp.com/3.0/lists/{}/members/".format(
+    os.environ["MCLIST_ID"]
+)
 
 
 @app.before_request
@@ -129,3 +154,64 @@ def display_template(template_slug):
                 matching_templates, name, postcode, address
             )
             return render_template("single_email.html", email=email_template[0])
+
+
+@app.route("/newsletter/subscribe", methods=["POST"])
+def subscribe_to_newsletter():
+
+    post_params = {"email_address": request.form["email"], "status": "subscribed"}
+    r = requests.post(
+        url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]), json=post_params
+    )
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    return jsonify(status="success")
+
+
+@app.route("/newsletter/check", methods=["POST"])
+def check_user_newsletter():
+
+    print(request.form)
+    email = request.form["email"].encode("utf-8")
+    user_hash = hashlib.md5(email).hexdigest()
+    req_url = "{}{}".format(url, user_hash)
+    print(req_url)
+    r = requests.get(req_url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]))
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    return jsonify(status="success", action=request.form["action"], user=user_hash)
+
+
+@app.route("/newsletter/unsubscribe", methods=["POST"])
+def unsubscribe_user_newsletter():
+    print(request.form)
+    req_url = "{}{}".format(url, request.form["user"])
+    print(req_url)
+    r = requests.delete(req_url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]))
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    return jsonify(status="success")
+
+
+@app.route("/newsletter/permanently_delete", methods=["POST"])
+def permanently_delete_user_newsletter():
+
+    print(request.form)
+    req_url = "{}{}/actions/delete-permanent".format(url, request.form["user"])
+    print(req_url)
+    r = requests.post(req_url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]))
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    return jsonify(status="success")

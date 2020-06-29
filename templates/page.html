@@ -93,8 +93,243 @@
 	<a href="{{ url_for('aboutus')}}">About us.</a>
 	<br>
 	<a href="mailto:writeforchanges@gmail.com?subject=Website%20Issue%3A&body=Issue%20Description%3A">Found an issue with the website? Report it here.</a>
+	<br>
+	<a data-toggle="modal" href="" data-target="#unsubChoiceModal">Unsubscribe from our mailing list</a>
 </footer>
 </body>
 
+
+
+<div class="modal fade" id="unsubChoiceModal" tabindex="-1" role="dialog" aria-labelledby="unsubChoiceModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="unsubChoiceModalLabel">Unsubscribe</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div>
+				Consider subscribing to our newsletter to receive updates about new templates and upcoming features
+			</div>
+			  <div>
+				  <label class="control-label">E-Mail Address</label>
+				  <div>
+					<input type="email" class="form-control" required name="email" id="email-input" data-placement='bottom' title='Please enter a valid email address' placeholder="example@domain.com">
+				  </div>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-warning mb-1" id="unsub-button" >Unsubscribe</button>
+			<button class="btn btn-danger mb-1"  id="perm-delete-button">Permanently delete</button>
+		</div>
+
+	  </div>
+	</div>
+  </div>
+
+
+  <div class="modal fade" id="unsubConfirmModal" tabindex="-1" role="dialog" aria-labelledby="unsubConfirmModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="unsubConfirmModalLabel">Unsubscribe</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<form id="unsub-confirm-form" style="display: none">
+				<input type="text"   id="user-hash">
+			</form>
+			<div id="unsub-confirm-warning">
+
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-danger mb-1" form="unsub-confirm-form" id="unsub-confirm-button"></button>
+			<button class="btn btn-success mb-1" data-dismiss="modal">Cancel</button>
+		</div>
+
+	  </div>
+	</div>
+  </div>
+
+  <div class="modal fade" id="unknownUserModal" tabindex="-1" role="dialog" aria-labelledby="unknownUserModal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="unknownUserModal">Unsubscribe</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div>
+				The email you have entered is not in our database, make sure you have entered it correctly.
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-primary mb-1" data-dismiss="modal">Ok</button>
+		</div>
+
+	  </div>
+	</div>
+  </div>
+
+  <div class="modal fade" id="successfulUnsubModal" tabindex="-1" role="dialog" aria-labelledby="successfulUnsubModal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="successfulUnsubModal">Unsubscribe</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div id="successful-unsub-info">
+
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-primary mb-1" data-dismiss="modal">Ok</button>
+		</div>
+
+	  </div>
+	</div>
+  </div>
+
+  <!--
+	  Have a modal which asks between unsub and perm del. Have a listener on each button which runs a js func which depending on the button which called it will fill a
+	  modal with an email form which will check for the existence of the email in the db. If email is in the db then another modal pops up telling that their mail is
+	  in the db and will ask to confirm action.
+   -->
+
+   <script type="text/javascript">
+
+   function checkEmail()
+   {
+	var email = document.getElementById('email-input');
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value))
+	{
+		return (true)
+	}
+	$('#email-input').tooltip('show');
+    return (false)
+   }
+
+   function mailCheckSubmit(event)
+   {
+	   if ( checkEmail() == true)
+	   {
+		var target_id = event.target.id;
+	   var request = new XMLHttpRequest();
+	   request.addEventListener('load', mailCheckShow);
+	   request.open('POST', {{ url_for('check_user_newsletter') | tojson}});
+	   var form = new FormData();
+	   form.append('email', document.getElementById('email-input').value)
+	   form.append('action', target_id);
+	   request.send(form);
+	   }
+   }
+
+   function mailCheckShow()
+   {
+	   var response = JSON.parse(this.responseText);
+	   $('#unsubChoiceModal').modal('hide');
+	   if (response.status == 'success')
+	   {
+			document.getElementById('user-hash').value = response.user;
+		   if (response.action == 'unsub-button')
+		   {
+			$('#unsub-confirm-warning').text('Are you sure you want to unsubscribe from our newsletter? This action is reversible.');
+			$('#unsub-confirm-button').text('Unsubscribe');
+
+			document.getElementById('unsub-confirm-form').addEventListener('submit', unsubscribe);
+		   }
+
+		   if (response.action == 'perm-delete-button')
+		   {
+			$('#unsub-confirm-warning').text('Are you sure you want to unsubscribe from our newsletter? This action is irreversible.');
+			$('#unsub-confirm-button').text('Permanently delete');
+
+			document.getElementById('unsub-confirm-form').addEventListener('submit', permanently_delete);
+		   }
+		   $('#unsubConfirmModal').modal('show');
+	   }
+	   else if (response.status == 'failed')
+	   {
+		   $('#unknownUserModal').modal('show');
+	   }
+   }
+
+   function unsubscribe(ev)
+   {
+	document.getElementById('unsub-confirm-form').removeEventListener('submit', unsubscribe);
+	ev.preventDefault();
+	var request = new XMLHttpRequest();
+	request.addEventListener('load', unsub_outcome);
+	request.open('POST', {{url_for('unsubscribe_user_newsletter') | tojson}});
+	var form = new FormData();
+	form.append('user', document.getElementById('user-hash').value );
+	request.send(form);
+   }
+
+   function permanently_delete(ev)
+   {
+	document.getElementById('unsub-confirm-form').removeEventListener('submit', permanently_delete);
+	ev.preventDefault();
+	var request = new XMLHttpRequest();
+	request.addEventListener('load', perm_delete_outcome);
+	request.open('POST', {{url_for('permanently_delete_user_newsletter') | tojson}});
+	var form = new FormData();
+	form.append('user', document.getElementById('user-hash').value );
+	request.send(form);
+   }
+
+   function unsub_outcome()
+   {
+	$("#unsubConfirmModal").modal('hide');
+	var response = JSON.parse(this.responseText);
+	if (response.status == 'success')
+	{
+		$("#successful-unsub-info").text('You are no longer subscribed to our newsletter');
+	}
+	else if (response.status == 'failed')
+	{
+		$("#successful-unsub-info").text('There was a problem with removing your subscription, please try again later');
+	}
+	$('#successfulUnsubModal').modal('show');
+   }
+
+   function perm_delete_outcome()
+   {
+	$("#unsubConfirmModal").modal('hide');
+	var response = JSON.parse(this.responseText);
+	if (response.status == 'success')
+	{
+		$("#successful-unsub-info").text('We have successfully deleted your profile from our database');
+	}
+	else if (response.status == 'failed')
+	{
+		$("#successful-unsub-info").text('There was a problem with removing you from our database, please try again later');
+	}
+	$('#successfulUnsubModal').modal('show');
+
+   }
+
+
+	var unsub = document.getElementById('unsub-button');
+	unsub.addEventListener('click', mailCheckSubmit);
+
+	var perm_delete = document.getElementById('perm-delete-button');
+	perm_delete.addEventListener('click', mailCheckSubmit);
+
+   </script>
 
 </html>
