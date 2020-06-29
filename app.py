@@ -31,6 +31,7 @@ import logging
 import os
 import sys
 import requests
+import hashlib
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -155,7 +156,7 @@ def display_template(template_slug):
             return render_template("single_email.html", email=email_template[0])
 
 
-@app.route("/newsletter", methods=["POST"])
+@app.route("/newsletter/subscribe", methods=["POST"])
 def subscribe_to_newsletter():
 
     post_params = {"email_address": request.form["email"], "status": "subscribed"}
@@ -167,5 +168,50 @@ def subscribe_to_newsletter():
     except HTTPError:
         return jsonify(status="failed")
 
-    results = r.json()
+    return jsonify(status="success")
+
+
+@app.route("/newsletter/check", methods=["POST"])
+def check_user_newsletter():
+
+    print(request.form)
+    email = request.form["email"].encode("utf-8")
+    user_hash = hashlib.md5(email).hexdigest()
+    req_url = "{}{}".format(url, user_hash)
+    print(req_url)
+    r = requests.get(req_url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]))
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    return jsonify(status="success", action=request.form["action"], user=user_hash)
+
+
+@app.route("/newsletter/unsubscribe", methods=["POST"])
+def unsubscribe_user_newsletter():
+    print(request.form)
+    req_url = "{}{}".format(url, request.form["user"])
+    print(req_url)
+    r = requests.delete(req_url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]))
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
+    return jsonify(status="success")
+
+
+@app.route("/newsletter/permanently_delete", methods=["POST"])
+def permanently_delete_user_newsletter():
+
+    print(request.form)
+    req_url = "{}{}/actions/delete-permanent".format(url, request.form["user"])
+    print(req_url)
+    r = requests.post(req_url, auth=("foo", os.environ["MAILCHIMP_SECRET_KEY"]))
+    try:
+        r.raise_for_status()
+    except HTTPError:
+        return jsonify(status="failed")
+
     return jsonify(status="success")
