@@ -1,3 +1,9 @@
+"""
+Data models used elsewhere in the EmailDrafter application.
+Used by Django to construct relevant tables in the database, to ease form creation in HTML and to standardise any other interactions with this data.
+
+David Swarbrick (davidswarbrick) 2020
+"""
 from django.db import models
 
 
