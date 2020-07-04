@@ -9,17 +9,17 @@
   <div>
   	{% for e in emails %}
   		<br>
-  		<h5 style="color: white;">{{ e.name }} to {{  e.target["name"] }} </h5>
+  		<h5 style="color: white;">{{ e.name }} to {{  e.target.name }} </h5>
   		<p>{% if e.author_url %}<a target="_blank" href="{{e.author_url}}">Original template.</a>{% endif %} {% if e.more_info_url %}<a target="_blank" href="{{e.more_info_url}}">More information about this campaign.</a>{% endif %}</p>
-  		<textarea disabled id="email{{loop.index}}" name="Email for {{ e.target['email'] }}" rows="20" style="width: 100%">
-  		{{ e.body }}
+  		<textarea disabled id="email{{loop.index}}" name="Email for {{ e.target.email }}" rows="20" style="width: 100%">
+  		{{ e.filled_body }}
   		</textarea>
   		<!-- <button class="btn btn-dark" role="button" onclick="_{{ loop.index }}()">Send to {{ e['email'] }}</button> -->
-  		<a class="btn btn-dark mb-1" href="mailto:{{e.target['email']}}?subject={{e.mailto_subject}}&body={{e.mailto_body}}" role="button">Open in default email app</a>
+  		<a class="btn btn-dark mb-1" href="mailto:{{e.target.email}}?subject={{e.mailto_subject}}&body={{e.mailto_filled_body}}" role="button">Open in default email app</a>
 
-  		<a class="btn btn-danger btn-email mb-1" onclick="copy_compose('gmail', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Gmail</a>
-  		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')" role="button">Open in Outlook</a>
-  		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e.target['email']}}', '{{e.mailto_subject}}')"role="button">Open in Yahoo Mail</a>
+  		<a class="btn btn-danger btn-email mb-1" onclick="copy_compose('gmail', {{loop.index}}, '{{e.target.email}}', '{{e.mailto_subject}}')" role="button">Open in Gmail</a>
+  		<a class="btn btn-primary btn-email mb-1" onclick="copy_compose('outlook', {{loop.index}}, '{{e.target.email}}', '{{e.mailto_subject}}')" role="button">Open in Outlook</a>
+  		<a class="btn btn-info btn-email mb-1" onclick="copy_compose('yahoo', {{loop.index}}, '{{e.target.email}}', '{{e.mailto_subject}}')"role="button">Open in Yahoo Mail</a>
 
   		<br>
   	{% endfor %}

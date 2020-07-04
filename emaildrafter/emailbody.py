@@ -47,6 +47,7 @@ class EmailBody(Template):
     def fill(self, user, target):
         """Return a 'safe' substitution of all template fields to their values in template_dict.
         The 'safe' prefix means that invalid placeholders (following a % sign) will not raise errors, just pass through unchanged."""
+        # ToDo : Validation on targets which will fit the template
         template_dict = EmailBody.construct_template_dict(user, target)
         return self.safe_substitute(**template_dict)
 

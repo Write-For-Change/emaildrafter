@@ -11,6 +11,8 @@ class UserForm(forms.Form):
     postcode = forms.CharField()
     address = forms.CharField()
     email = forms.EmailField()
+    # This field will be auto-filled by a request to the postcode api
+    constituency = forms.CharField()
 
 
 # As Template submissions and submitter info will be stored in a database we construct their forms from their model fields below

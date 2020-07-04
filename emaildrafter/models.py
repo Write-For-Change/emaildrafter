@@ -8,6 +8,7 @@ from django.db import models
 from django.urls import reverse
 from urllib.parse import quote
 from .emailbody import EmailBody
+from .externalapis import get_constituency
 
 
 class EmailTemplate(models.Model):
@@ -38,15 +39,20 @@ class EmailTemplate(models.Model):
     filled_body = ""
     filled = False
 
-    def fill(self, user, external_target=None):
-        """Fill the empty template body prioritising the template-attached target over one externally supplied"""
+    def fill(self, user_form):
+        """Fill the empty template body, getting MP information if no target is set"""
+        # Construct an EmailBody template object
         empty_body = EmailBody(self.body)
-        if self.target:
-            self.filled_body = empty_body.fill(user, self.target)
-        elif external_target:
-            self.filled_body = empty_body.fill(user, external_target)
-        else:
-            raise TypeError("Missing Target to Fill Template")
+
+        if self.target is None:
+            # If target has not been set, then it should be replaced with a user's MP
+            # Get the relevant MP using the constituency from the form the user submitted.
+            mp = MP.objects.get(constituency=user_form.clean_data["constituency"])
+            # Set this mp as the target of this template
+            # NB do not call .save() on this object as we do not wish this change to persist beyond a single user.
+            self.target = mp
+
+        self.filled_body = empty_body.fill(user_form, self.target)
         self.filled = True
 
     def get_absolute_url(self):
