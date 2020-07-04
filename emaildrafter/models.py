@@ -5,6 +5,9 @@ Used by Django to construct relevant tables in the database, to ease form creati
 David Swarbrick (davidswarbrick) 2020
 """
 from django.db import models
+from django.urls import reverse
+from urllib.parse import quote
+from .emailbody import EmailBody
 
 
 class EmailTemplate(models.Model):
@@ -12,7 +15,7 @@ class EmailTemplate(models.Model):
 
     # https://stackoverflow.com/questions/1592291/what-is-the-email-subject-length-limit
     subject = models.CharField(max_length=78)
-    body = models.TextField()
+    body = models.TextField(validators=[EmailBody.validate_body])
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
     # blank = True allows these extra information fields to be empty
@@ -20,6 +23,7 @@ class EmailTemplate(models.Model):
     author_url = models.URLField(blank=True)
     target_is_local_mp = models.BooleanField(default=True)
     public = models.BooleanField(default=False)
+    admin_approved = models.BooleanField(default=False)
     upload_date = models.DateTimeField()
 
     # Target field only set if NOT target_is_local_mp, stores a related target object
@@ -28,6 +32,36 @@ class EmailTemplate(models.Model):
     )
     # Multiple topics can be associated with a template
     topics = models.ManyToManyField("Topic", blank=True)
+
+    # Template filling & display
+
+    filled_body = ""
+    filled = False
+
+    def fill(self, user, external_target=None):
+        """Fill the empty template body prioritising the template-attached target over one externally supplied"""
+        empty_body = EmailBody(self.body)
+        if self.target:
+            self.filled_body = empty_body.fill(user, self.target)
+        elif external_target:
+            self.filled_body = empty_body.fill(user, external_target)
+        else:
+            raise TypeError("Missing Target to Fill Template")
+        self.filled = True
+
+    def get_absolute_url(self):
+        """Set the url for each template to use the slug field."""
+        return reverse("single-template", kwargs={"slug": self.slug})
+
+    @property
+    def mailto_subject(self):
+        """Passes the subject through the urllib quote parser for usage in mailto links in HTML"""
+        return quote(self.subject)
+
+    @property
+    def mailto_filled_body(self):
+        """Passes the body through the urllib quote parser for usage in mailto links in HTML"""
+        return quote(self.filled_body).replace("%0A", "%0D%0A")
 
 
 class EmailTarget(models.Model):

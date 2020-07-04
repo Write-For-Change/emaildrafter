@@ -8,4 +8,5 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("about-us", views.aboutus, name="aboutus"),
+    path("template/<slug:slug>/", views.single_template, name="single-template"),
 ]

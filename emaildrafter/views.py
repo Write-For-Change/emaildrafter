@@ -15,5 +15,10 @@ def index(request):
     return render(request, "landing.html")
 
 
+def single_template(request, template_slug):
+    """Shell function to implement viewing a single template."""
+    return
+
+
 def aboutus(request):
     return render(request, "aboutus.html")
