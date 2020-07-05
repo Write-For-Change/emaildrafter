@@ -27,8 +27,8 @@ class EmailTemplate(models.Model):
     upload_date = models.DateTimeField()
 
     # Target field only set if NOT target_is_local_mp, stores a related target object
-    target = models.OneToOneField(
-        "SpecificTarget", on_delete=models.CASCADE, default=None, blank=True
+    specific_target = models.OneToOneField(
+        "SpecificTarget", on_delete=models.CASCADE, default=None, blank=True, null=True
     )
     # Multiple topics can be associated with a template
     topics = models.ManyToManyField("Topic", blank=True)
@@ -37,26 +37,44 @@ class EmailTemplate(models.Model):
 
     filled_body = ""
     filled = False
+    mp = None
 
     def fill(self, user_form):
         """Fill the empty template body, getting MP information if no target is set"""
         # Construct an EmailBody template object
         empty_body = EmailBody(self.body)
 
-        if self.target is None:
+        if self.specific_target is None and self.target_is_local_mp:
             # If target has not been set, then it should be replaced with a user's MP
             # Get the relevant MP using the constituency from the form the user submitted.
-            mp = MP.objects.get(constituency=user_form.clean_data["constituency"])
+            users_mp = MP.objects.get(
+                constituency=user_form.cleaned_data["constituency"]
+            )
             # Set this mp as the target of this template
             # NB do not call .save() on this object as we do not wish this change to persist beyond a single user.
-            self.target = mp
-
-        self.filled_body = empty_body.fill(user_form, self.target)
+            self.mp = users_mp
+            self.filled_body = empty_body.fill(user_form, self.mp)
+        else:
+            self.filled_body = empty_body.fill(user_form, self.specific_target)
         self.filled = True
+
+    def __str__(self):
+        return self.name
 
     def get_absolute_url(self):
         """Set the url for each template to use the slug field."""
         return reverse("single-template", kwargs={"slug": self.slug})
+
+    @property
+    def target(self):
+        """Returns the target object of the EmailTemplate: either set explicitly as a specific_target, or the MP details stored when filling the email body."""
+        if self.specific_target is None:
+            if self.target_is_local_mp and self.mp is not None:
+                return self.mp
+            else:
+                raise AttributeError("No Target set for Email Template")
+        else:
+            return self.specific_target
 
     @property
     def mailto_subject(self):
@@ -74,6 +92,9 @@ class EmailTarget(models.Model):
 
     name = models.CharField(max_length=200)
     email = models.EmailField()
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         abstract = True
