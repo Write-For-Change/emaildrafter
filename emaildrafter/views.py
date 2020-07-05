@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from .forms import UserForm
 from .models import EmailTemplate, MP
-from .externalapis import lookup_postcode, get_addresses, get_constituency
+from .externalapis import lookup_postcode, get_addresses
 
 
 def draft_templates(templates, user_form):
@@ -14,14 +14,14 @@ def draft_templates(templates, user_form):
 def index(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
-
         if user_form.is_valid():
             templates = EmailTemplate.objects.all()
             emails = draft_templates(templates, user_form)
             context = {"emails": emails}
-            return render("all-topics.html", context=context)
-
-    return render(request, "landing.html")
+            return render(request, "all-topics.html", context=context)
+    else:
+        user_form = UserForm()
+    return render(request, "user-form.html", {"form": user_form})
 
 
 def single_template(request, template_slug):
@@ -33,11 +33,11 @@ def aboutus(request):
     return render(request, "aboutus.html")
 
 
-def postcode(postcode):
+def postcode(request, postcode):
     post_code_data = lookup_postcode(postcode)
     if post_code_data["status"] == 200:
         r = {
-            "constituency": data["result"]["parliamentary_constituency"],
+            "constituency": post_code_data["result"]["parliamentary_constituency"],
             "addresses": get_addresses(postcode),
         }
         return JsonResponse(r)

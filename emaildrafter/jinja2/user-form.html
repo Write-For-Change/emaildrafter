@@ -6,7 +6,10 @@
 	<p>We just need some information so we can generate the emails for you. We'll never share your details with anyone else.</p>
 	<form method="post">
 		{{ csrf_input }}
-		<div class="form-group" style="width: 100%">
+		{{form}}
+		<button type="button" id="findAddress" class="btn btn-dark">Find address</button>
+		<button id="submit" type="submit" class="btn btn-dark">Generate the emails for me</button>
+		<!-- <div class="form-group" style="width: 100%">
 			<input class="form-control" id="name" name="name" placeholder="Full Name" minlength="3" required>
 		</div>
 		<div id="postcode-group" class="form-group" style="width: 100%">
@@ -21,7 +24,7 @@
 		</div>
 		<div style="text-align: center; width: 100%">
 			<button id="submit" type="submit" class="btn btn-dark">Generate the emails for me</button>
-		</div>
+		</div> -->
 	</form>
 </div>
 

@@ -6,8 +6,6 @@ davidswarbrick 2020
 import re
 from string import Template
 from django.core.exceptions import ValidationError
-from .forms import UserForm
-from .models import EmailTarget
 
 
 class EmailBody(Template):
@@ -24,10 +22,10 @@ class EmailBody(Template):
     @staticmethod
     def construct_template_dict(user, target):
         """Construct a dictionary of substitutions from the input user and target objects"""
-        assert isinstance(user, UserForm)
+        # assert isinstance(user, UserForm)
         # Check user form is valid
         assert user.is_valid()
-        assert isinstance(target, EmailTarget)
+        # assert isinstance(target, EmailTarget)
 
         # This is currently decoupled from the ALLOWED_FIELDS class attribute, this may want to be addressed if extra allowed fields are added.
         # Ideally, a website administrator would be able to edit the replacement string and the attribute to which it is attached - this may require a different data model.

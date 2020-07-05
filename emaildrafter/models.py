@@ -8,7 +8,6 @@ from django.db import models
 from django.urls import reverse
 from urllib.parse import quote
 from .emailbody import EmailBody
-from .externalapis import get_constituency
 
 
 class EmailTemplate(models.Model):

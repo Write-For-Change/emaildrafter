@@ -9,8 +9,7 @@ from .models import EmailTemplate, EmailTemplateSubmitter
 class UserForm(forms.Form):
     name = forms.CharField()
     postcode = forms.CharField()
-    address = forms.CharField()
-    email = forms.EmailField()
+    address = forms.CharField(widget=forms.Select)
     # This field will be auto-filled by a request to the postcode api
     constituency = forms.CharField()
 
